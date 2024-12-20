@@ -1,0 +1,112 @@
+
+version: '3'
+
+services:
+
+  # PostgreSQL service
+  db:
+    build:
+      context: ../
+      dockerfile: container/Postgres/Dockerfile
+    image: tagc-mimicintweb-db
+    container_name: tagc-mimicintweb-db
+    restart: always
+    environment:
+      POSTGRES_USER: django
+      POSTGRES_PASSWORD: mimicINTweb
+      POSTGRES_DB: mimicINT_db
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - 5432:5432
+      - 22:22
+    volumes:
+      - /home/mimicint/tagc-mimicweb/tagc-mimicint/postgresql:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  # Web server
+  web:
+    build: 
+      context: ../
+      dockerfile: container/Django/Dockerfile
+    image: tagc-mimicintweb-web
+    env_file:
+      - .env
+    restart: always
+    container_name: tagc-mimicintweb-web
+#    command: python /code/manage.py runserver 0.0.0.0:8000
+    ports:
+      - 8000:8000
+    volumes:
+      - ../code:/code
+      - /home/mimicint/tagc-mimicweb/tagc-mimicint/jobs:/jobs
+#      - static:/static
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  #nginx
+  nginx:
+    image: tagc-mimicintweb-nginx
+    container_name: tagc-mimicintweb-nginx
+    restart: always
+    build:
+      context: ../
+      dockerfile: container/nginx/Dockerfile
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ../code:/code
+    depends_on:
+      - web
+    networks:
+      - app-network
+
+
+  # Adminer
+  adminer:
+    image: adminer:4.7.6
+    container_name: tagc-mimicintweb-adminer
+    restart: always
+    ports:
+      - 8081:8080
+    networks:
+      - app-network
+
+# Slurm
+  slurm:
+    image:
+      #tagc-docker-centos7-slurm
+      #mimicint_slurm_snakemake
+      docker-centos7-slurm-snakemake
+    container_name: docker-centos7-slurm-snakemake
+    hostname: ernie
+    stdin_open: true
+    tty: true
+    privileged: true
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - "22222:22"
+    volumes:
+      - /home/mimicint/tagc-mimicweb/tagc-mimicint/slurm/volumes/lib:/var/lib/slurmd
+      - /home/mimicint/tagc-mimicweb/tagc-mimicint/slurm/volumes/spool:/var/spool/slurmd
+      - /home/mimicint/tagc-mimicweb/tagc-mimicint/slurm/volumes/log:/var/log/slurm
+      - /home/mimicint/tagc-mimicweb/tagc-mimicint/slurm/volumes/db:/var/lib/mysql
+      - /home/mimicint/tagc-mimicweb/tagc-mimicint/jobs:/jobs
+      - /home/mimicint/tagc-mimicweb:/home/mimicint/tagc-mimicweb
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - app-network
+
+# Docker networks
+networks:
+  app-network:
+    driver: bridge
+
+
+

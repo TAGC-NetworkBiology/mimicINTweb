@@ -1,0 +1,15 @@
+  ////////////////////////////////////////////////////////////////////////////
+ //////////////////////////////////README////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+
+Le répertoire HelloDJ contient l'ensemble des pages HTML de l'application.
+ - BASE est la page html dont héritent toutes les autres.
+ 	Elle contient les dépendances au STATIC, la barre de navigation et le footer
+
+ - HOME représente la page d'accueil
+ - FORM génère le formulaire de soumission de job
+ - PIPELINE correspond à la page d'attente
+ - JOBS permet d'acceder aux résulats à partir d'un formulaire de soumisssion d'ID
+ - RESULAT  génère la page des résultats
+ - CYTOSCAPE permet d'afficher en grand le réseau d'interactions
+ - COLORS est une page de test des boutons et couleurs de l'application

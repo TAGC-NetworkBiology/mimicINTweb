@@ -1,0 +1,40 @@
+  ////////////////////////////////////////////////////////////////////////////
+ //////////////////////////////////README////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+
+Le dossier CODE contient 3 sous dossiers :
+	- jobs contient l'ensemble des dossiers de jobs généré par l'application
+
+	- mimicINT contient le fichier settings (fichier de paramètre de django)
+	  et le fichier url permettant de deffinir les patterns URL pour chaque view
+
+	- mimicINTapp contient la view, le form, les medels les pages html et les fichiers statics
+
+
+/////////////////////////////////////////////////////////////////////////////
+
+
+Le dossier contient également un fichier manage.py permettant de lancer l'application et d'autres
+fonctionalités.
+A partir du teminal se placer dans le répertoire du fichier manage.py et lancer la commande 
+suivantes pour demarrer l'application en mode locale (8000:0.0.0.0) : 
+		docker-compose up
+
+D'autres fonctions sont disponibles a partir de commande suivante : 
+		docker-compose run web python manage.py
+
+suivit d'une des options ci-dessous : 
+	- collectstatic (Recueille les fichiers statiques dans le répertoire STATIC_ROOT)
+	- makemigrations (Crée de nouvelles migrations sur la base des modifications détectées dans
+	  les modèles)
+	- migrate (Actualise l’état de la BDD en accord avec l’ensemble des modèles et des migrations actuels) 
+	- createsuperuser (Crée un compte super-utilisateur pour la page d'administration)
+
+
+/////////////////////////////////////////////////////////////////////////////
+
+
+Vous trouverez d'autres README dans : 
+- mimicINTapp
+- mimicINTapp/static
+- mimicINTapp/templates/helloDJ

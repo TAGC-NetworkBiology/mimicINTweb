@@ -1,0 +1,82 @@
+{% extends "helloDJ/base.html" %}
+{% block content %}
+
+{% load static %}
+
+
+	<nav style = ' margin: 0px; padding : 0px;
+        background-color: background: rgb(0,136,201);
+		background: -moz-linear-gradient(90deg, rgba(0,136,201,1) 0%, rgba(238,238,238,1) 50%);
+		background: -webkit-linear-gradient(90deg, rgba(0,136,201,1) 0%, rgba(238,238,238,1) 50%);
+		background: linear-gradient(90deg, rgba(0,136,201,1) 0%, rgba(238,238,238,1) 50%);
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#0088c9",endColorstr="#eeeeee",GradientType=1);'>
+        <div class="container" >
+            <div class="navbar-header" >
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{% url 'home' %}" ><span>mimic</span>INT</a>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav navbar-right">    
+                    <li class="{% if page == 'home' %}active{% endif %}"><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="">Prediction</a></li>
+                    <li><a href="">Jobs</a></li>
+                    <li><a href="">Tutorial</a></li>
+                    <li><a href="">Documentation</a></li>
+                    <li><a href="">Contact Us</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+
+<br><br><br><br>
+<span class="color-sample" style="background-color : #1A5276 ; padding: 50px 70px; "></span>
+<span class="color-sample" style="background-color : #2471a3; padding: 50px 70px; "></span>
+<span class="color-sample" style="background-color : #5DADE2; padding: 50px 70px; "></span>
+<span class="color-sample" style="background-color : #b6d7ea; padding: 50px 70px; "></span>
+<span class="color-sample" style="background-color : #f0ab00; padding: 50px 70px; "></span>
+<span class="color-sample" style="background-color : #F1C40F; padding: 50px 70px; "></span>
+<span class="color-sample" style="background-color : #85888d; padding: 50px 70px; "></span>
+
+
+
+<br><br><br><br><br>
+
+
+<span class="color-sample" style="background-color : #1A5276; padding: 50px 70px; "></span>
+<span class="color-sample" style="background-color : #0088c9; padding: 50px 70px; "></span>
+<span class="color-sample" style="background-color : #3db7e4; padding: 50px 70px; "></span>
+<span class="color-sample" style="background-color : #b6d7ea; padding: 50px 70px; "></span>
+<span class="color-sample" style="background-color : #f0ab00; padding: 50px 70px; "></span>
+<span class="color-sample" style="background-color : #F1C40F; padding: 50px 70px; "></span>
+<span class="color-sample" style="background-color : #85888d; padding: 50px 70px; "></span>
+<span class="color-sample" style="background-color : #e27400; padding: 50px 70px; "></span>
+
+
+<br><br><br><br><br><hr><br>
+
+
+
+<div>
+    <button class="submit-button">submit form</button>
+    <button class="option-button">show options</button>
+    <button class="reset-button">reset options</button>
+    <button class="link-button">watch tutorial</button>
+</div>
+
+<br>
+
+<div>
+    <button class="submit-button" style ="background: linear-gradient(135deg, #0088c9 80%, #fff 81%, #1A5276 82%);">submit form</button>
+    <button class="option-button" style ="background: linear-gradient(135deg, #3db7e4 80%, #fff 81%, #2471a3 82%);">show options</button>
+    <button class="reset-button" style ="background: linear-gradient(135deg, #85888d 80%, #fff 81%, #3db7e4 82%);">reset options</button>
+    <button class="link-button" style ="background: linear-gradient(135deg, #f1c40f 80%, #fff 81%, #e27400 82%);">watch tutorial</button>
+    <button class="link-button" style ="background: linear-gradient(135deg, #f0ab00 80%, #fff 81%, #e27400 82%);">watch tutorial</button>
+</div>
+
+{% endblock %}

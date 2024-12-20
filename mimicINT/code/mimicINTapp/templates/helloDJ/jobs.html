@@ -1,0 +1,25 @@
+{% extends "helloDJ/base.html" %}
+{% block content %}
+{% load static %}
+
+
+<section id="home" class="section-padding">
+    <div>
+        <br>
+        <h1 class="s0">Access your <em>mimic</em>INT job</h1>
+    </div> 
+    <div class="jobs-form text-center">
+        <form action="{% url 'jobs' %}" method="post">{% csrf_token %}
+            <input id="job_id" name="job_id" placeholder="Enter job ID" type="search" {% if job_not_found %} class="error"{% endif %}>
+            <input class="jobs-form-submit-btn" value="Submit job ID" type="submit">
+        </form>
+        {% if job_not_found %}
+            <div class="job-not-found">
+                The submitted job ID does not exist
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+
+{% endblock %}

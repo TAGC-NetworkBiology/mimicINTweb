@@ -1,0 +1,64 @@
+{% extends "helloDJ/base.html" %}
+{% block content %}
+{% load static %}
+
+
+<script>
+    var data_network = "{{ data_network }}";
+    data_network = JSON.parse(data_network.replace(/&quot;/g,'"'));
+</script>
+
+<!-- Partie Visualisation du Graph -->
+<section class="section-padding" style="color: #21618C margin:0px; padding-bottom: 0px; ">
+    
+    <!-- Génère les champs de modification du reseau d'interaction -->
+    <div class="container" style="font-size: 14px; text-align: center;">
+        <h1 class="s0">Prediction of microbe-host protein interactions</h1>
+        Layout
+        <select name="layout" id="layout" style="width : 200px;" onchange="update_layout()">
+            <option value="concentric" selected>Concentric</option>
+            <option value="cose">Force-directed</option>
+            <option value="breadthfirst">Hierarchy</option>
+            <option value="circle">Circle</option>
+        </select>&emsp;
+
+        &emsp;min. host degree&emsp;
+        <select name="target_degree" id="target_degree" style="width : 60px;" onchange="update_network()">
+            <option value=1 selected>1</option>
+            <option value=3>3</option>
+            <option value=5>5</option>
+            <option value=10>10</option>
+            <option value=50>50</option>
+        </select>&emsp;
+
+        &emsp;min. microbe degree&emsp;
+        <select name="query_degree" id="query_degree" style="width : 60px;" onchange="update_network()">
+            <option value=1 selected>1</option>
+            <option value=3>3</option>
+            <option value=5>5</option>
+            <option value=10>10</option>
+            <option value=50>50</option>
+        </select>&emsp;
+
+        &emsp;Type of interactions&emsp;
+        <select name="edges" id="edges" style="width : 200px;" onchange="update_network()">
+            <option value=0 selected>All</option>
+            <option value=1>Domain-Domain</option>
+            <option value=2>SLiM-Domain</option>
+            <option value=3>SD & DD</option>
+        </select>&emsp;
+    </div>
+    <!-- Creation du module cytoscpae -->
+    <div id="cy" class="cy_max"></div>
+    <div id="cytoscape_message" style="text-align: center;color: #8B0000; font-style: italic;"></div>
+    <script type="text/javascript" src="{%  static 'cytoscape/network.js' %}"></script>
+        </div>        
+    </div>
+</section>
+
+
+
+
+
+
+{% endblock %}

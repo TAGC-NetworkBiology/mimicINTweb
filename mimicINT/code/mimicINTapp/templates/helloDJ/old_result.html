@@ -1,0 +1,250 @@
+{% extends "helloDJ/base.html" %}
+{% block content %}
+{% load static %}
+
+<!-- fichiers javascript generant les resultats  -->
+<script type="text/javascript" src="{%  static 'feature-viewer/create_feature.js' %}"></script>
+<script type="text/javascript" src="{%  static 'feature-viewer/show_domains.js' %}"></script>
+<script type="text/javascript" src="{%  static 'dataTables/make_tables.js' %}"></script>
+
+
+<!-- fonction permettant de parser les donnees network et feature -->
+<script> 
+    var query_list = ({{query_domain_list|safe}});
+    
+    var data_network = "{{ data_network }}";
+    data_network = JSON.parse(data_network.replace(/&quot;/g,'"'));
+    
+    var data_features = "{{ data_features }}";
+    data_features = JSON.parse(data_features.replace(/&quot;/g,'"'));
+</script>
+
+
+
+<!-- Partie Visualisation du Graph -->
+<section class="section-padding" style="color: #21618C margin:0px; padding-bottom: 0px; ">
+    
+    <!-- Génère les champs de modification du reseau d'interaction -->
+    <div class="container" style="font-size: 14px; text-align: center;">
+        <h1 class="s0">Prediction of microbe-host protein interactions</h1>
+        Layout
+        <select name="layout" id="layout" style="width : 200px;" onchange="update_layout()">
+            <option value="concentric" selected>Concentric</option>
+            <option value="cose">Force-directed</option>
+            <option value="breadthfirst">Hierarchy</option>
+            <option value="circle">Circle</option>
+        </select>&emsp;
+
+        &emsp;min. host degree&emsp;
+        <select name="target_degree" id="target_degree" style="width : 60px;" onchange="update_network()">
+            <option value=1 selected>1</option>
+            <option value=3>3</option>
+            <option value=5>5</option>
+            <option value=10>10</option>
+            <option value=50>50</option>
+        </select>&emsp;
+
+        &emsp;min. microbe degree&emsp;
+        <select name="query_degree" id="query_degree" style="width : 60px;" onchange="update_network()">
+            <option value=1 selected>1</option>
+            <option value=3>3</option>
+            <option value=5>5</option>
+            <option value=10>10</option>
+            <option value=50>50</option>
+        </select>&emsp;
+
+        &emsp;Type of interactions&emsp;
+        <select name="edges" id="edges" style="width : 200px;" onchange="update_network()">
+            <option value=0 selected>All</option>
+            <option value=1>Domain-Domain</option>
+            <option value=2>SLiM-Domain</option>
+            <option value=3>SD & DD</option>
+        </select>&emsp;
+    </div>
+
+    <!-- Partie sommaire des donnees d'interaction -->
+    <div class="header-section">
+        <div class="col-md-6 col-sm-6 col-xs-12" >
+            <div>
+                <br>
+                <h3>summary</h3>
+                <b>Host proteins :</b> 942 
+                <br><b>Microbe proteins :</b> 5 <!-- nb ligne sesquence_name.stv-->
+                <br>
+                <br><b>Total interactions :</b> 14,503
+                <br><b>Domain-Domain interactions :</b> 1,341
+                <br><b>SLiM-Domain interactions :</b> 48,560
+                <br>
+                <br><b>Domain-Domain edges :</b> 1,924
+                <br><b>SLiM-Domain edges :</b> 386
+                <br><b>DD & SD edges :</b> 13
+                <br><br>
+            </div>
+            <div>
+                <h3>legend</h3>
+                <img src="{%  static 'img/legend.png' %}" style="height: 180px;">
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-6 col-xs-12">
+            <center>
+                <input type="button" onclick='window.open(this.href="{% url "cytoscape" job_id %}");' target="_blank" class="link-button" value="large view">
+            </center>
+            <!-- Creation du module cytoscpae -->
+            <div id="cy" class="cy_min"></div>
+            <div id="cytoscape_message" style="text-align: center;color: #8B0000; font-style: italic;"></div>
+            <script type="text/javascript" src="{%  static 'cytoscape/network.js' %}"></script>
+            <br><br>
+        </div>        
+    </div>
+</section>
+
+
+<section>
+    <!-- Creation de la barre de navigation des resultats -->
+    <div class="tabbed">
+        <input type="radio" name="tabs" id="tab-nav-1" checked>
+        <label for="tab-nav-1">Predicted Interactions</label>
+        <input type="radio" name="tabs" id="tab-nav-2">
+        <label for="tab-nav-2">Sequence Visualisation</label>
+        <input type="radio" name="tabs" id="tab-nav-3">
+        <label for="tab-nav-3">Functional Enrichment</label>
+        <input type="radio" name="tabs" id="tab-nav-4">
+        <label for="tab-nav-4">Download Files</label>
+        <div class="tabs">
+            <section>
+                <!-- Partie interaction predites -->
+                <div id="Interaction_Div" style="margin:50px 0px;">
+                    <h3>Microbe-host interactions</h3>
+                    <table id="Interaction_Table" class="table table-striped table-sm" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th class="th-sm">Microbre accession</th>
+                                <th class="th-sm">SLiM or Domain accession</th>
+                                <th class="th-sm">Interaction template</th>
+                                <th class="th-sm">SLiM or Domain description</th>
+                                <th class="th-sm">Host domain accession</th>
+                                <th class="th-sm">Host domain</th>
+                                <th class="th-sm">Host domain description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for element in interaction_list %}
+                                <tr>
+                                    <td>{{ element.0 }}</td>
+                                    {% if element.6 == "SLiM" %}
+                                        <td><a href="http://elm.eu.org/elms/{{ element.1 }}" target="_blank">{{ element.1 }}</a></td>
+                                    {% else %}
+                                        <td><a href="http://pfam.xfam.org/family/{{ element.1 }}" target="_blank">{{ element.1 }}</a></td>
+                                    {% endif %}                               
+                                    <td>{{ element.6 }}-Domain</td>
+                                    <td>{{ element.2 }}</td>
+                                    <td><a href="https://www.uniprot.org/uniprot/{{ element.3 }}" target="_blank">{{ element.3 }}</a></td>
+                                    <td><a href="http://pfam.xfam.org/family/{{ element.4 }}" target="_blank">{{ element.4 }}</a></td>
+                                    <td>{{ element.5}}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Partie visualisation des proteines de microbe -->
+            <section>
+                <div id="Query_Protein_Div" style="margin:50px 0px;">
+                    <h3>Microbe Proteines</h3>
+
+                    <table id="Query_Protein_Table" class="table table-striped table table-sm" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th class="th-sm">Name</th>
+                                <th class="th-sm">Length</th>
+                                <th class="th-sm">Disorder content</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for element in query_protein_list %}
+                                <tr>
+                                <!-- 
+                                show domains permet de generer la table des domaines 
+                                et motifs en cliquant sur l'ID de la proteine, ainsi que la 
+                                parti partie de visualisation avec Feature-Viewer
+                                -->
+                                    <td><a onclick='show_domains("{{ element.0 }}")'>{{ element.0 }}</a></td>
+                                    <td>{{ element.1 }}</td>                             
+                                    <td>{{ element.2 }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div id="Feature_Viewer_Div" style="margin:50px 0px;">
+                </div>
+                <div id="Query_Domain_Div" style="margin:50px 0px;">
+                    <h3>Microbe SLiMs and domains</h3>
+                    <table id="Query_Domain_Table" class="table table-striped table table-sm" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th class="th-sm">Identifier</th>
+                                <th class="th-sm">Type</th>
+                                <th class="th-sm">Description</th>
+                                <th class="th-sm">Start position</th>
+                                <th class="th-sm">End position</th>
+                            </tr>
+                        </thead>
+                        <tbody id ="Query_Domain_tbody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+
+            <!-- Partie enrichissement fonctionnel des proteines hotes -->
+            <section>
+                <div id="enrichment_Div" style="margin:50px 0px;">
+                    <h3>Functional Enrichment</h3>
+                    <table id="enrichment_Table" class="table table-striped table table-sm" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th class="th-sm">Identifier</th>
+                                <th class="th-sm">Source</th>
+                                <th class="th-sm">Term name</th>
+                                <th class="th-sm">p_value</th>
+                                <th class="th-sm">Term size</th>                                
+                                <th class="th-sm">Query size</th>
+                                <th class="th-sm">Intersction size</th>
+                                <th class="th-sm">Precision</th>
+                                <th class="th-sm">Recall</th>
+                            </tr>
+                        </thead>
+                        <tbody id ="enrichment_tbody">
+                            {% for element in enrichment_list %}
+                                <tr>
+                                    <td>{{ element.0 }}</td>
+                                    <td>{{ element.1 }}</td>                             
+                                    <td>{{ element.2 }}</td>
+                                    <td>{{ element.3 }}</td>                             
+                                    <td>{{ element.4 }}</td>
+                                    <td>{{ element.5 }}</td>                             
+                                    <td>{{ element.6 }}</td>
+                                    <td>{{ element.7 }}</td>                             
+                                    <td>{{ element.8 }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+
+            <!-- Partie telechargment des resultats -->
+            <section>
+                <div id="Download_Div" style="margin:50px 0px;">
+                <h3>Download</h3>
+                <img src="{%  static 'img/result4.png' %}" style="width: 1100px; "/>            
+            </section>
+        </div>
+    </div>
+
+</section>
+
+
+{% endblock %}

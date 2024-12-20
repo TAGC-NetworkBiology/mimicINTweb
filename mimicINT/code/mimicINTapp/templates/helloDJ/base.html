@@ -1,0 +1,145 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>{{ title }}</title>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'cytoscape/cytoscape.css' %}"/>
+    <script type="text/javascript" src="{% static 'cytoscape/cytoscape.min.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/bootstrap.min.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'dataTables/dataTables.bootstrap.min.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'CustomFileInput/custom-file-input.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'fonts/font-awesome.min.css' %}"/>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/bootstrap.min.css.map' %}"/>
+
+    <script type="text/javascript" src="{%  static 'jquery/jquery.min.js' %} "></script> 
+    <script type="text/javascript" src="{%  static 'jquery/jquery.dataTables.min.js' %} "></script> 
+    <script type="text/javascript" src="{%  static 'dataTables/dataTables.bootstrap.min.js' %} "></script> 
+    <script type="text/javascript" src="{%  static 'bootstrap/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{%  static 'd3/d3.min.js' %}"></script>
+    <script type="text/javascript" src="{%  static 'feature-viewer/feature-viewer.min.js' %}"></script>
+    <script type="text/javascript" src="{%  static 'js/tooltip.js' %}"></script>
+    <script type="text/javascript" src="{%  static 'js/form_functions.js' %}"></script>
+    <script type="text/javascript" src="{%  static 'js/progress_bar.js' %}"></script>
+
+    <script>(function(e,t,n){var r=e.querySelectorAll("html")[0];r.className=r.className.replace(/(^|\s)no-js(\s|$)/,"$1js$2")})(document,window,0);</script>
+</head>
+
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{% url 'home' %}"><span>mimic</span>INT<span>web</span></a>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar" style="text-align: right;">
+                <ul class="nav navbar-nav navbar-right">    
+                    <li class="{% if page == 'home' %}active{% endif %}"><a href="{% url 'home' %}">Home</a></li>
+                    <li class="{% if page == 'prediction' %}active{% endif %}"><a href="{% url 'form' %}">Run <i>mimic</i>INT</a></li>
+                    <li class="{% if page == 'jobs' %}active{% endif %}"><a href="{% url 'jobs' %}">Retrieve jobs</a></li>
+                    <li><a href="{% url 'tutorial' %}">Tutorial</a></li>
+                    <li><a href="{% url 'documentation' %}">Documentation</a></li>
+                   <!--  <li><a href="" data-toggle="modal" data-target="#myModal">Contact Us</a></li> -->
+                    <li><a href="{% url 'about' %}">About</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+
+<!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Contact Us</h4>
+                </div>
+
+                <div class="modal-body" style="color: #21618C;">
+                    <form action="." method="post">
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <label for="{{ form.name.id_for_label }}">Name</label>
+                                <input class="form-control" type="text" id="name" name="name" placeholder="Enter your name" required>
+                            </div>
+
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <label for="{{ form.name.id_for_label }}">First name</label>
+                                <input class="form-control" type="text" id="firstname" name="firstname" placeholder="Enter your firstname" required>
+                                <br>
+                            </div>
+
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <label for="{{ form.organization.id_for_label }}">Organization</label>
+                                <input class="form-control" type="text" id="organization" name="organization" placeholder="Enter your organization" required>
+
+                                <label style="margin-top : 15px;" for="{{ mail.id_for_label }}">e-mail</label>
+                                <input class="form-control" type="email" id="email" name="email" placeholder="Enter your email" required>
+                                <br>
+
+                                <label for="{{ form.interaction_templates.id_for_label }}">Title</label>
+                                <div>
+                                    <center>
+                                        <input class="form-control" type="text" id="title" name="title" placeholder="Enter a title" required>
+                                    </center>
+                                </div>
+
+                                <label style="margin-top : 15px;" for="{{ informations.id_for_label }}">Text</label>
+                                <textarea class="form-control" type="text" id="informations" name="informations" cols="40" rows="5" required></textarea>
+                                <br>
+                            </div>
+                        </div>
+
+                        <center>
+                            <input type="submit" class="link-button" value="Send message">
+                        </center>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    {% block content %}
+    {% endblock %}
+
+    {% if page == 'home' or page == 'about' %}
+        <footer>
+            <a href="https://tagc.univ-amu.fr/" target="_blank"><img class="footer-image" src="{%  static 'img/logo_tagc.png' %}"/></a>
+            <a href="https://www.univ-amu.fr/" target="_blank"><img class="footer-image" src="{%  static 'img/logo_amu.png' %}" /></a>
+            <a href="https://www.inserm.fr/" target="_blank"><img class="footer-image" src="{%  static 'img/Inserm_rvb_noir.png' %}" /></a>
+            <a href="https://cordis.europa.eu/project/id/101003633" target="_blank"><img class="footer-image" src="{%  static 'img/h2020_logo.png' %}" /></a>
+            <a href="https://anr.fr/Project-ANR-17-HDIM-0001/" target="_blank"><img class="footer-image" src="{%  static 'img/logo_anr.png' %}"/></a>
+            <a href="https://www.healthydietforhealthylife.eu/project/dime" target="_blank"><img class="footer-image" src="{%  static 'img/logo_jpi.jpg' %}"/></a>
+            <a href="https://centuri-livingsystems.org/" target="_blank"><img class="footer-image" src="{%  static 'img/centuri_logo.png' %}"/></a>
+            <a href="https://www.frm.org/" target="_blank"><img class="footer-image" src="{%  static 'img/Logo_Fondation_Recherche_Medicale.jpg' %}"/></a>
+            <br>
+            2024 TAGC | Aix-Marseille Université | Inserm | EU H2020 | Agence Nationale de Recherche | JPI-HDHL | CENTURI | FRM
+        </footer>
+    {% else %}
+        <footer>
+            2024 TAGC | Aix-Marseille Université | Inserm | EU H2020 | Agence Nationale de Recherche | JPI-HDHL | CENTURI | FRM
+        </footer>  
+    {% endif %}
+
+
+
+
+</body>
+
+<script type="text/javascript" src="{%  static 'CustomFileInput/custom-file-input.js' %}"></script>
+</html>

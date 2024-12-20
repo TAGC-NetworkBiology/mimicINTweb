@@ -1,0 +1,12 @@
+django==2.2.1
+django-filter
+django-widget-tweaks
+psycopg2
+requests
+django_extensions
+django-database-view
+django-datatables-view
+shortuuid
+pyyaml
+gunicorn
+psycopg2-binary==2.9.6

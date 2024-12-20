@@ -1,0 +1,151 @@
+{% extends "helloDJ/base.html" %}
+{% block content %}
+{% load static %}
+
+
+<section id="home" class="section-padding">
+    <div>
+        <br>
+        <h1 class="s0">Documentation</h1>
+    </div> 
+
+    <div class="row">
+        <div class="header-section text-center">
+            <h2>Overview</h2>
+            <hr class="bottom-line">
+            <div>
+                <p>
+                  <em>mimic</em>INTweb provide an easy-to-use interface to the <em>mimic</em>INT workflow, which has been particularly designed to infer the interactions 
+                between microbe proteins of interest and a substantial fraction of the human proteome using known interaction templates (domain-domain and motif-domain).
+                </p>
+		<p>
+		  <em>mimic</em>INT takes as input the FASTA-formatted sequences of microbe proteins (<em>e.g.</em>, viral or other pathogen proteins susceptible to be found at the
+		  pathogen-host interface) to detect host-like elements: domains and SLiMs. The domain identification is performed by the InterProScan tool using the domain
+		  signatures from the InterPro database. The host-like SLiMs detection exploits the motif definitions available in the ELM database and is carried out by the
+		  SLiMProb tool from the SLiMSuite software package. As SLiMs are usually located in disordered regions, SLiMProb uses the IUPred algorithm to compute the
+		  disorder propensity of each amino acid in the query sequences, and generates an average disorder propensity score for every detected SLiM occurrence.                 
+		</p>
+		<p>
+		  Subsequently, <em>mimic</em>INT infers the interactions between host and microbe proteins. This analysis takes as input the list of known interactions templates
+		  gathered from two resources: <em>(i)</em> the 3did database, a collection of domain-domain interactions extracted from three-dimensional protein structures, and
+		  <em>(ii)</em> the ELM database that provides a list of experimentally identified SLIM-domain interactions in Eukaryotes. The inference checks whether any of the
+		  microbe proteins contains at least one domain or SLIM for which an interaction template is available. In this case, it infers the interaction between
+		  the given protein and all the host proteins containing the cognate domain (<em>i.e.</em>, the interacting domain in the template). As motif-binding domains of
+		  the same group, like SH3 or PDZ, show different interaction specificities, for the SLiM-domain interaction inference, we have implemented a previously
+		  proposed strategy to take these differences into account. This approach assigns a "domain score" that can be used to rank or filter inferred SLiM-domain
+		  interactions (see below). 
+		</p>
+		<p>
+		  In the final step, in order to identify the host cellular functions potentially targeted by the pathogen proteins, <em>mimic</em>INT executes a functional enrichment
+		  analysis of host inferred interactors. This analysis statistically assesses the over-representation of functional categories, such as Gene Ontology terms
+		  and biological pathways (<em>e.g.</em>, KEGG and Reactome), using the g:Profiler R client.
+                </p>
+
+		<figure>
+		  <img src="{%  static 'mimicint_workflow.png' %}" alt="Overview of the mimicINT workflow" style="width:80%">
+		  <figcaption>
+		  <b>Figure 1. Overview of the <em>mimic</em>INT workflow.</b><br> By providing a fasta file of protein sequences of interest (<em>e.g.</em>, microbe sequences)
+                  (A), <em>mimic</em>INT allows identifying both the domain (B) and SLiM (C) mediated interfaces of interactions. Using publicly available templates of interactions,
+                  <em>mimic</em>INT infers the interactions between the proteins of the query and target (<em>i.e.</em>, host) species (D). Finally, it provides a list of functional annotations
+                  that are significantly enriched in inferred protein targets (E).
+		  </figcaption>
+		</figure> 
+<br>
+
+	</div>
+	<h2>Computation of the motif-binding domain scores</h2>
+	<hr class="bottom-line">
+	<div>
+
+	  <p>To identify motif-binding domains that can be specifically associated to a given ELM motif class, we use the same strategy proposed by Weatheritt <em>et al.</em> (2012),
+	    which assumes that a domain significantly similar to a known motif-binding domain should also bind the same motif. We first compiled a list of experimentally identified
+	    motif bind domains by gathering the original list from Weatheritt <em>et al.</em> complemented by more recent annotations from the ELM database (August 2020). Obsolete ELM class
+	    identifiers from Weatheritt <em>et al.</em> were mapped to current ELM identifiers using the "Renamed ELM classes file (<a href=http://elm.eu.org/infos/browse_renamed.tsv>http://elm.eu.org/infos/browse_renamed.tsv</a>) and duplicated
+	    domain annotations were removed. In total, we collected 538 domains in 415 human proteins known to bind 212 ELM motif classes (73% of the 290 motif classes present in ELM,
+	    August 2020). The sequences of these 415 annotated proteins were fetched from UniprotKB. We next gathered the sequences of 1452 reference Eukaryota proteomes (22,262,113
+	    protein sequences in total) from UniprotKB (August 2020). We removed redundancy using the CD-HIT algorithm to generate a database of 21,414,544 non-identical sequences.
+	    We used the GOPHER tool from the SLiMSuite package to identify orthologous sequences of the annotated proteins in the database of non-identical eukaryotic sequences by
+	    reciprocal BLAST best hits. Selected orthologous proteins were aligned using the multiple sequence alignment algorithm Clustal Omega (version 1.2.4). Once the position
+	    of the motif-binding domain was identified within the alignment, we removed aligned domains with indels covering >10% of the annotated domain sequence. We iteratively
+	    realigned the sequences until a set of proteins was identified with <10% indels coverage. In total, we selected 701 multiple sequence alignments that were used as input
+	for generating domain-specific HMM profiles with the hmmbuild program from the HMMER package (version 3.1.1).  Subsequently, we scanned a representative set of the
+	human proteome (20,350 “reviewed” sequences from UniprotKB) with the domain-specific HMMs using the hmmsearch program. We used a <em>E</em>-value cutoff of 0.01 to select the
+	best hits and we rejected those hits with a length of <90% of the annotated motif-binding domain sequence length. Finally, the <em>E</em>-value of the best-scoring domain was
+	converted into a domain similarity score using the iELM script downloaded from <a href=http://elmint.embl.de/program_file/>http://elmint.embl.de/program_file/</a>.
+
+	   <br>
+	   </p><b>
+           <p>You can find more technical details on the <em>mimic</em>INT GitHub repository:
+	     <a href="https://github.com/TAGC-NetworkBiology/mimicINT" target="_blank">https://github.com/TAGC-NetworkBiology/mimicINT</a>
+	   </p>
+	   <p> And in the mimicINT paper:
+	     <a href="https://doi.org/10.1101/2022.11.04.515250" target="_blank">https://doi.org/10.1101/2022.11.04.515250</a>
+	   </p></b>
+       </div>
+
+<br>
+
+       <h2>Tools and resources used by <em>mimic</em>INT</h2>
+       <hr class="bottom-line">
+       <div>
+         <p>
+	   <b>3did:</b> <a href="https://3did.irbbarcelona.org/" target="_blank">https://3did.irbbarcelona.org/</a><br>
+	   <b>ELM database:</b> <a href="http://elm.eu.org/index.html" target="_blank">http://elm.eu.org/index.html</a><br>
+	   <b>gProfiler2 R client:</b> <a href="https://biit.cs.ut.ee/gprofiler/page/r" target="_blank">https://biit.cs.ut.ee/gprofiler/page/r</a><br>
+	   <b>InterProScan:</b> <a href="https://www.ebi.ac.uk/interpro/search/sequence/" target="_blank">https://www.ebi.ac.uk/interpro/search/sequence/</a><br>
+	   <b>IUPred:</b> <a href="https://iupred2a.elte.hu/" target="_blank">https://iupred2a.elte.hu/</a><br>
+	   <b>SLiMSuite:</b> <a href="https://github.com/slimsuite" target="_blank">https://github.com/slimsuite</a><br>
+         </p>
+       </div>
+
+
+       <h2>Relevant references</h2>
+       <hr class="bottom-line">
+       <div align="left">
+
+         <p>
+	 <ul>
+	   <li>Blum,M. <em>et al.</em> (2021) The InterPro protein families and domains database: 20 years on. <em>Nucleic Acids Res</em>, <b>49</b>, D344–D354.
+	   <a href="https://doi.org/10.1093/nar/gkaa977" target="_blank">https://doi.org/10.1093/nar/gkaa977</a></li><br>
+
+	   <li>Davey,N.E. <em>et al.</em> (2007) The SLiMDisc server: short, linear motif discovery in proteins. <em>Nucleic Acids Res.</em>, <b>35</b>, W455-459.
+	   <a href="https://doi.org/10.1093/nar/gkm400" target="_blank">https://doi.org/10.1093/nar/gkm400</a></li><br>
+
+	   <li>Dosztányi,Z. (2018) Prediction of protein disorder based on IUPred. <em>Protein Sci</em>, <b>27</b>, 331–340.
+	   <a href="https://doi.org/10.1002/pro.3334" target="_blank">https://doi.org/10.1002/pro.3334</a></li><br>
+
+	   <li>Edwards,R.J. <em>et al.</em> (2020) Computational Prediction of Disordered Protein Motifs Using SLiMSuite. <em>Methods Mol Biol</em>, <b>2141</b>, 37–72.
+	   <a href="https://doi.org/10.1007/978-1-0716-0524-0_3" target="_blank">https://doi.org/10.1007/978-1-0716-0524-0_3</a></li><br>
+
+	   <li>Edwards,R.J. and Palopoli,N. (2015) Computational prediction of short linear motifs from protein sequences. <em>Methods Mol. Biol.</em>, <b>1268</b>, 89–141.
+	   <a href="https://doi.org/10.1007/978-1-4939-2285-7_6" target="_blank">https://doi.org/10.1007/978-1-4939-2285-7_6</a></li><br>
+
+	   <li>Jones,P. <em>et al.</em> (2014) InterProScan 5: genome-scale protein function classification. <em>Bioinformatics</em>, <b>30</b>, 1236–1240.
+	   <a href="https://doi.org/10.1093/bioinformatics/btu031" target="_blank">https://doi.org/10.1093/bioinformatics/btu031</a></li><br>
+
+	   <li>Kumar,M. <em>et al.</em> (2020) ELM-the eukaryotic linear motif resource in 2020. <em>Nucleic Acids Res</em>, <b>48</b>, D296–D306.
+	   <a href="https://doi.org/10.1093/nar/gkz1030" target="_blank">https://doi.org/10.1093/nar/gkz1030</a></li><br>
+
+	   <li>Mosca,R. <em>et al.</em> (2014) 3did: a catalog of domain-based interactions of known three-dimensional structure. <em>Nucleic Acids Res</em>, <b>42</b>, D374-379.
+	   <a href="https://doi.org/10.1093/nar/gkt887" target="_blank">https://doi.org/10.1093/nar/gkt887</a></li><br>
+
+	   <li>Paulsen,K. (2019) Optimising intrinsic disorder prediction for short linear motif discovery. PhD thesis.
+	   <a href="https://doi.org/10.26190/unsworks/21456" target="_blank">https://doi.org/10.26190/unsworks/21456</a></li><br>
+
+	   <li>Weatheritt,R.J. <em>et al.</em> (2012) The identification of short linear motif-mediated interfaces within the human interactome. <em>Bioinformatics</em>, <b>28</b>, 976–982.
+	   <a href="https://doi.org/10.1093/bioinformatics/bts072" target="_blank">https://doi.org/10.1093/bioinformatics/bts072</a></li><br>
+	 </ul>
+	 </p>
+	<br>
+       </div>
+
+
+
+
+
+
+    
+</section>
+
+
+{% endblock %}

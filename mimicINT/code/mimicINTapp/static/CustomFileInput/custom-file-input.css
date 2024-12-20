@@ -1,0 +1,59 @@
+
+
+
+[type="file"] {
+  height: 0;
+  width: 0;
+  overflow: hidden;
+}
+
+.js .inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+.inputfile + label {
+    text-align: center;
+    min-width: 50%;
+    border-radius: 3px;
+    font-family:Arial;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.625rem 0;
+    margin: 0px;
+    float: left;
+}
+
+.no-js .inputfile + label {
+    display: inline;
+}
+
+
+.inputfile + label * {
+    /* pointer-events: none; */
+    /* in case of FastClick lib use */
+}
+
+.inputfile + label svg {
+    width: 1em;
+    height: 1em;
+    vertical-align: middle;
+    fill: currentColor;
+    margin-top: -0.25em;
+    /* 4px */
+    margin-right: 0.25em;
+    /* 4px */
+}
+
+.inputfile-1 + label {
+    color: #ffffff;
+    background-color: #5DADE2;
+}
+
+.inputfile-1 + label:hover {
+    background-color: #175782;
+}

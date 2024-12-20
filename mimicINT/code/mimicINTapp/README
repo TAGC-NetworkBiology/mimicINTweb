@@ -1,0 +1,15 @@
+  ////////////////////////////////////////////////////////////////////////////
+ //////////////////////////////////README////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+
+Le répertoire mimicINTapp contient les dossiers suivants :
+	- MIGRATIONS contient les migrations effectuées sur la BDD
+	- STATIC contient les fichiers IMAGES CSS et JAVASCRIPT
+	- TEMPLATES contient les pages HTML du site
+
+Le répertoire contient des fichiers python dont les fonctions sont les suivantes : 
+	- FORMS permet de définir les champs des formulaires
+	- MODELS permet de définir les tables de la base de données
+	- ADMIN permet de rattacher les models à la page d'administration
+	- FONCTIONs contient des fonctions python complémentaires créées par le développeur
+	- VIEWS contient les vues de l'application

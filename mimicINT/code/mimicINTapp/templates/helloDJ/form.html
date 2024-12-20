@@ -1,0 +1,227 @@
+{% extends "helloDJ/base.html" %}
+{% block content %}
+
+{% load static %}
+
+<!-- contient la fonction permettant de reinitialiser les options -->
+
+<script type="text/javascript">
+    var fasta_example = ("{{fasta_example|safe}}");
+</script>
+
+<center>
+    <section id="formulaire" class="section-padding">
+
+        <div class="container">
+            <h1 class="s0">Run <i>mimic</i>INT</h1>
+        </div>
+
+        <form name="myForm" action="{% url 'pre_pipeline' %}" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">{% csrf_token %}
+            <div class="form-container" style="padding-bottom: 0px;">
+                <div class="row">
+                    <div id="errormessage"></div>
+                    <div class="col-md-6 col-sm-6 col-xs-12 form-content">
+                        {{ form.query_sequencies.errors }}
+                        <label for="{{ form.query_sequencies.id_for_label }}" style="color: #21618C;">{{ setting_list.0.setting_name }}</label>
+                        <a class="tooltip-large" data-toggle="tooltip" data-placement="bottom" title="{{ setting_list.0.tooltip }}"><img src="{% static 'img/info_button.png' %}" class="info-bulle"></a>
+                        {{ form.query_sequencies }}
+                        {{ form.query_fasta_file }}
+
+                        <label for="id_query_fasta_file"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"/></svg> <span>Choose a file&hellip;</span></label>
+                        <input type="button" onclick ="example_to_textarea()" class="load-example-button" id="load-example-button" value="Load example">
+
+                    </div>
+              
+                    <div class="col-md-6 col-sm-6 col-xs-12 form-content" style="color: #21618C;">
+                        <label for="{{ form.run_name.id_for_label }}">{{ setting_list.1.setting_name }}</label>
+                         <a class="tooltip-large" data-toggle="tooltip" data-placement="bottom" title="{{ setting_list.1.tooltip }}"><img src="{% static 'img/info_button.png' %}" class="info-bulle"></a>
+                        {{ form.run_name }}
+                        {{ form.run_name.errors }}                 
+
+                        <label style="margin-top : 5px;" >{{ setting_list.2.setting_name }}</label>
+                        <a class="tooltip-large" data-toggle="tooltip" data-placement="bottom" title="{{ setting_list.2.tooltip }}">
+                        <img src="{% static 'img/info_button.png' %}" class="info-bulle"></a>
+                        <input class="form-control",  placeholder ="Human", readonly>
+
+<!--                         <label style="margin-top : 5px;" for="{{ form.microbe_species.id_for_label }}">{{ setting_list.3.setting_name }}</label>
+                        <a class="tooltip-large" data-toggle="tooltip" data-placement="bottom" title="{{ setting_list.3.tooltip }}"><img src="{% static 'img/info_button.png' %}" class="info-bulle"></a>
+                        {{ form.microbe_species }}
+                        {{ form.microbe_species.errors }}                           
+ -->
+                        <label style="margin-top : 5px;" for="{{ query_informations.id_for_label }}">{{ setting_list.4.setting_name }}</label>
+                        <a class="tooltip-large" data-toggle="tooltip" data-placement="bottom" title="{{ setting_list.4.tooltip }}"><img src="{% static 'img/info_button.png' %}" class = "info-bulle"></a>
+                        {{ form.query_informations }}
+                        {{ form.query_informations.errors }}
+
+<!--                         <label style="margin-top : 15px;" for="{{ send_mail.id_for_label }}">Receive an email</label>
+                        <a class="tooltip-large" data-toggle="tooltip" data-placement="bottom" title="{{ setting_list.1.tooltip }}"><img src="{% static 'img/info_button.png' %}" class="info-bulle"></a>
+                        {{ form.send_mail }}
+                        {{ form.send_mail.errors }} -->
+
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <div class="button-container">
+                <input type="button" onclick="window.open('{% url 'tutorial' %}','tutorial');" class="link-button" style="float: left;" value="read the tutorial" >
+                <input type="button" href="#options" class="option-button" id="option_button" data-toggle="collapse" onClick = "this.style.visibility= 'hidden';" value="show options">
+                <input type="submit" value="Run it!" class="submit-button">
+            </div>
+
+
+            <div id="options" class="collapse">
+                <div class="form-container" style="padding-top: 0px;">
+                    <div class="row">
+                        <div class="option-title-container">
+                            QUERY SLIM AND DOMAIN DETECTION OPTIONS
+                        </div>
+                            <div class="col-md-6 col-sm-12 col-xs-12" style="padding: 5px;">
+                                <div class="option-container">
+                                    <div style="margin-top: 5%;">
+                                        <label for="{{ form.iumethod.id_for_label }}">{{ setting_list.9.setting_name }}</label>
+                                        <a class="tooltip-large" data-toggle="tooltip" data-placement="bottom" title="{{ setting_list.9.tooltip }}"><img src="{% static 'img/info_button.png' %}" class="info-bulle"></a>
+                                        <div>
+                                            {{ form.iumethod }}
+                                        </div>
+                                    </div>
+
+                                    <div style="margin-top : 8px;">
+                                        <label for="{{ form.iucut.id_for_label }}">{{ setting_list.10.setting_name }}</label>
+                                        <a class="tooltip-large" data-toggle="tooltip" data-placement="bottom" title="{{ setting_list.10.tooltip }}"><img src="{% static 'img/info_button.png' %}" class="info-bulle"></a>
+                                        <div class="custom-rangecontainer">
+                                            {{ form.iucut }}
+
+                                            <div class="ticks">
+                                                <span class="tick">0</span>
+                                                <span class="tin-tick"></span>
+                                                <span class="tick">0.2</span>
+                                                <span class="tin-tick"></span>
+                                                <span class="tick">0.4</span>
+                                                <span class="tin-tick"></span>
+                                                <span class="tick">0.6</span>
+                                                <span class="tin-tick"></span>
+                                                <span class="tick">0.8</span>
+                                                <span class="tin-tick"></span>
+                                                <span class="tick">1</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                               </div>
+                            </div>
+<!-- modification 2024-02-29 -->
+                           
+									<div class="col-md-6 col-sm-12 col-xs-12" style="padding: 5px;">  
+									   <div class="option-container">  
+                                <div style="margin-top: 5%;">
+                                    <label for="{{ form.minregion.id_for_label }}">{{ setting_list.11.setting_name }}</label>
+                                    <a class="tooltip-large" data-toggle="tooltip" data-placement="bottom" title="{{ setting_list.11.tooltip }}"><img src="{% static 'img/info_button.png' %}" class="info-bulle"></a>
+                                    <div class="custom-rangecontainer">
+                                        {{ form.minregion }}
+                                        <div class="ticks">
+                                            <span class="tick">0</span>
+                                            <span class="tin-tick"></span>
+                                            <span class="tin-tick"></span>
+                                            <span class="tin-tick"></span>
+                                            <span class="tin-tick"></span>
+                                            <span class="tick">5</span>
+                                            <span class="tin-tick"></span>
+                                            <span class="tin-tick"></span>
+                                            <span class="tin-tick"></span>
+                                            <span class="tin-tick"></span>
+                                            <span class="tick">10</span>
+                                            <span class="tin-tick"></span>
+                                            <span class="tin-tick"></span>
+                                            <span class="tin-tick"></span>
+                                            <span class="tin-tick"></span>
+                                            <span class="tick">15</span>
+                                            <span class="tin-tick"></span>
+                                            <span class="tin-tick"></span>
+                                            <span class="tin-tick"></span>
+                                            <span class="tin-tick"></span>
+                                            <span class="tick">20</span>
+                                            <span class="tin-tick"></span>
+                                            <span class="tin-tick"></span>
+                                            <span class="tin-tick"></span>
+                                            <span class="tin-tick"></span>
+                                            <span class="tick">25</span>
+                                            <span class="tin-tick"></span>
+                                            <span class="tin-tick"></span>
+                                            <span class="tin-tick"></span>
+                                            <span class="tin-tick"></span>
+                                            <span class="tick">30</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="margin-top : 6px;">
+                                    <label>{{ setting_list.12.setting_name }}</label>
+                                    <a class="tooltip-large" data-toggle="tooltip" data-placement="bottom" title="{{ setting_list.12.tooltip }}"><img src="{% static 'img/info_button.png' %}" class="info-bulle"></a>
+                                </div>
+                                <div class="custom-rangecontainer">
+                                        {{ form.conserved_motifs }}
+                                        <div class="ticks">
+                                            <span class="tick">10⁻²</span>
+                                            <span class="tick">10⁻³</span>
+                                            <span class="tick">10⁻⁴</span>
+                                            <span class="tick">10⁻⁵</span>
+                                            <span class="tick">10⁻⁶</span>
+                                        </div>
+                                </div>
+                              </div>
+                            </div>    
+                                                      
+                                
+
+                            <div class="col-md-12 col-sm-12 col-xs-12" style="padding: 5px;">
+                                <div class="option-title-container">
+                                      HOST PROTEIN OPTIONS
+                                </div>
+                                <div class="option-container"> 
+                                <div style="margin-top : 2%;">
+                                    <label>{{ setting_list.14.setting_name }}</label>
+                                    <a class="tooltip-large" data-toggle="tooltip" data-placement="bottom" title="{{ setting_list.14.tooltip }}"><img src="{% static 'img/info_button.png' %}" class="info-bulle"></a>
+                                </div>
+                                <div class="custom-rangecontainer">
+                                        {{ form.domain_score_threshold }}
+                                        <div class="ticks">
+                                            <span class="tick">None</span>
+                                            <span class="tin-tick"></span>
+                                            <span class="tick">0.2</span>
+                                            <span class="tin-tick"></span>
+                                            <span class="tick">0.4</span>
+                                        </div>
+                                    </div>
+                                  </div>
+                                </div>
+                            </div>
+
+
+                    <div class="button-container">
+                        <input type="button" id="reset" class="reset-button" onclick="reset_options();" value="reset options">
+                        <input type="button" href="#options" class="option-button" data-toggle="collapse" onclick = "document.getElementById('option_button').style.visibility= 'visible';" value="hide options">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </section>
+</center>
+
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

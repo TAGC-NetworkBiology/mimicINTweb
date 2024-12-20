@@ -1,0 +1,522 @@
+-- Adminer 4.7.6 PostgreSQL dump
+
+DROP TABLE IF EXISTS "auth_group";
+DROP SEQUENCE IF EXISTS auth_group_id_seq;
+CREATE SEQUENCE auth_group_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1;
+
+CREATE TABLE "public"."auth_group" (
+    "id" integer DEFAULT nextval('auth_group_id_seq') NOT NULL,
+    "name" character varying(150) NOT NULL,
+    CONSTRAINT "auth_group_name_key" UNIQUE ("name"),
+    CONSTRAINT "auth_group_pkey" PRIMARY KEY ("id")
+) WITH (oids = false);
+
+CREATE INDEX "auth_group_name_a6ea08ec_like" ON "public"."auth_group" USING btree ("name");
+
+
+DROP TABLE IF EXISTS "auth_group_permissions";
+DROP SEQUENCE IF EXISTS auth_group_permissions_id_seq;
+CREATE SEQUENCE auth_group_permissions_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1;
+
+CREATE TABLE "public"."auth_group_permissions" (
+    "id" integer DEFAULT nextval('auth_group_permissions_id_seq') NOT NULL,
+    "group_id" integer NOT NULL,
+    "permission_id" integer NOT NULL,
+    CONSTRAINT "auth_group_permissions_group_id_permission_id_0cd325b0_uniq" UNIQUE ("group_id", "permission_id"),
+    CONSTRAINT "auth_group_permissions_pkey" PRIMARY KEY ("id"),
+    CONSTRAINT "auth_group_permissio_permission_id_84c5c92e_fk_auth_perm" FOREIGN KEY (permission_id) REFERENCES auth_permission(id) DEFERRABLE INITIALLY DEFERRED DEFERRABLE,
+    CONSTRAINT "auth_group_permissions_group_id_b120cbf9_fk_auth_group_id" FOREIGN KEY (group_id) REFERENCES auth_group(id) DEFERRABLE INITIALLY DEFERRED DEFERRABLE
+) WITH (oids = false);
+
+CREATE INDEX "auth_group_permissions_group_id_b120cbf9" ON "public"."auth_group_permissions" USING btree ("group_id");
+
+CREATE INDEX "auth_group_permissions_permission_id_84c5c92e" ON "public"."auth_group_permissions" USING btree ("permission_id");
+
+
+DROP TABLE IF EXISTS "auth_permission";
+DROP SEQUENCE IF EXISTS auth_permission_id_seq;
+CREATE SEQUENCE auth_permission_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1;
+
+CREATE TABLE "public"."auth_permission" (
+    "id" integer DEFAULT nextval('auth_permission_id_seq') NOT NULL,
+    "name" character varying(255) NOT NULL,
+    "content_type_id" integer NOT NULL,
+    "codename" character varying(100) NOT NULL,
+    CONSTRAINT "auth_permission_content_type_id_codename_01ab375a_uniq" UNIQUE ("content_type_id", "codename"),
+    CONSTRAINT "auth_permission_pkey" PRIMARY KEY ("id"),
+    CONSTRAINT "auth_permission_content_type_id_2f476e4b_fk_django_co" FOREIGN KEY (content_type_id) REFERENCES django_content_type(id) DEFERRABLE INITIALLY DEFERRED DEFERRABLE
+) WITH (oids = false);
+
+CREATE INDEX "auth_permission_content_type_id_2f476e4b" ON "public"."auth_permission" USING btree ("content_type_id");
+
+INSERT INTO "auth_permission" ("id", "name", "content_type_id", "codename") VALUES
+(1,	'Can add log entry',	1,	'add_logentry'),
+(2,	'Can change log entry',	1,	'change_logentry'),
+(3,	'Can delete log entry',	1,	'delete_logentry'),
+(4,	'Can view log entry',	1,	'view_logentry'),
+(5,	'Can add permission',	2,	'add_permission'),
+(6,	'Can change permission',	2,	'change_permission'),
+(7,	'Can delete permission',	2,	'delete_permission'),
+(8,	'Can view permission',	2,	'view_permission'),
+(9,	'Can add group',	3,	'add_group'),
+(10,	'Can change group',	3,	'change_group'),
+(11,	'Can delete group',	3,	'delete_group'),
+(12,	'Can view group',	3,	'view_group'),
+(13,	'Can add user',	4,	'add_user'),
+(14,	'Can change user',	4,	'change_user'),
+(15,	'Can delete user',	4,	'delete_user'),
+(16,	'Can view user',	4,	'view_user'),
+(17,	'Can add content type',	5,	'add_contenttype'),
+(18,	'Can change content type',	5,	'change_contenttype'),
+(19,	'Can delete content type',	5,	'delete_contenttype'),
+(20,	'Can view content type',	5,	'view_contenttype'),
+(21,	'Can add session',	6,	'add_session'),
+(22,	'Can change session',	6,	'change_session'),
+(23,	'Can delete session',	6,	'delete_session'),
+(24,	'Can view session',	6,	'view_session'),
+(25,	'Can add news_part',	7,	'add_news_part'),
+(26,	'Can change news_part',	7,	'change_news_part'),
+(27,	'Can delete news_part',	7,	'delete_news_part'),
+(28,	'Can view news_part',	7,	'view_news_part'),
+(29,	'Can add setting_prediction',	8,	'add_setting_prediction'),
+(30,	'Can change setting_prediction',	8,	'change_setting_prediction'),
+(31,	'Can delete setting_prediction',	8,	'delete_setting_prediction'),
+(32,	'Can view setting_prediction',	8,	'view_setting_prediction'),
+(33,	'Can add home_text',	9,	'add_home_text'),
+(34,	'Can change home_text',	9,	'change_home_text'),
+(35,	'Can delete home_text',	9,	'delete_home_text'),
+(36,	'Can view home_text',	9,	'view_home_text'),
+(37,	'Can add output_file',	10,	'add_output_file'),
+(38,	'Can change output_file',	10,	'change_output_file'),
+(39,	'Can delete output_file',	10,	'delete_output_file'),
+(40,	'Can view output_file',	10,	'view_output_file'),
+(41,	'Can add pipeline_rule',	11,	'add_pipeline_rule'),
+(42,	'Can change pipeline_rule',	11,	'change_pipeline_rule'),
+(43,	'Can delete pipeline_rule',	11,	'delete_pipeline_rule'),
+(44,	'Can view pipeline_rule',	11,	'view_pipeline_rule'),
+(45,	'Can add job_infos',	12,	'add_job_infos'),
+(46,	'Can change job_infos',	12,	'change_job_infos'),
+(47,	'Can delete job_infos',	12,	'delete_job_infos'),
+(48,	'Can view job_infos',	12,	'view_job_infos'),
+(49,	'Can add site',	13,	'add_site'),
+(50,	'Can change site',	13,	'change_site'),
+(51,	'Can delete site',	13,	'delete_site'),
+(52,	'Can view site',	13,	'view_site'),
+(53,	'Can add flat page',	14,	'add_flatpage'),
+(54,	'Can change flat page',	14,	'change_flatpage'),
+(55,	'Can delete flat page',	14,	'delete_flatpage'),
+(56,	'Can view flat page',	14,	'view_flatpage');
+
+DROP TABLE IF EXISTS "auth_user";
+DROP SEQUENCE IF EXISTS auth_user_id_seq;
+CREATE SEQUENCE auth_user_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1;
+
+CREATE TABLE "public"."auth_user" (
+    "id" integer DEFAULT nextval('auth_user_id_seq') NOT NULL,
+    "password" character varying(128) NOT NULL,
+    "last_login" timestamptz,
+    "is_superuser" boolean NOT NULL,
+    "username" character varying(150) NOT NULL,
+    "first_name" character varying(30) NOT NULL,
+    "last_name" character varying(150) NOT NULL,
+    "email" character varying(254) NOT NULL,
+    "is_staff" boolean NOT NULL,
+    "is_active" boolean NOT NULL,
+    "date_joined" timestamptz NOT NULL,
+    CONSTRAINT "auth_user_pkey" PRIMARY KEY ("id"),
+    CONSTRAINT "auth_user_username_key" UNIQUE ("username")
+) WITH (oids = false);
+
+CREATE INDEX "auth_user_username_6821ab7c_like" ON "public"."auth_user" USING btree ("username");
+
+
+DROP TABLE IF EXISTS "auth_user_groups";
+DROP SEQUENCE IF EXISTS auth_user_groups_id_seq;
+CREATE SEQUENCE auth_user_groups_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1;
+
+CREATE TABLE "public"."auth_user_groups" (
+    "id" integer DEFAULT nextval('auth_user_groups_id_seq') NOT NULL,
+    "user_id" integer NOT NULL,
+    "group_id" integer NOT NULL,
+    CONSTRAINT "auth_user_groups_pkey" PRIMARY KEY ("id"),
+    CONSTRAINT "auth_user_groups_user_id_group_id_94350c0c_uniq" UNIQUE ("user_id", "group_id"),
+    CONSTRAINT "auth_user_groups_group_id_97559544_fk_auth_group_id" FOREIGN KEY (group_id) REFERENCES auth_group(id) DEFERRABLE INITIALLY DEFERRED DEFERRABLE,
+    CONSTRAINT "auth_user_groups_user_id_6a12ed8b_fk_auth_user_id" FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED DEFERRABLE
+) WITH (oids = false);
+
+CREATE INDEX "auth_user_groups_group_id_97559544" ON "public"."auth_user_groups" USING btree ("group_id");
+
+CREATE INDEX "auth_user_groups_user_id_6a12ed8b" ON "public"."auth_user_groups" USING btree ("user_id");
+
+
+DROP TABLE IF EXISTS "auth_user_user_permissions";
+DROP SEQUENCE IF EXISTS auth_user_user_permissions_id_seq;
+CREATE SEQUENCE auth_user_user_permissions_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1;
+
+CREATE TABLE "public"."auth_user_user_permissions" (
+    "id" integer DEFAULT nextval('auth_user_user_permissions_id_seq') NOT NULL,
+    "user_id" integer NOT NULL,
+    "permission_id" integer NOT NULL,
+    CONSTRAINT "auth_user_user_permissions_pkey" PRIMARY KEY ("id"),
+    CONSTRAINT "auth_user_user_permissions_user_id_permission_id_14a6b632_uniq" UNIQUE ("user_id", "permission_id"),
+    CONSTRAINT "auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm" FOREIGN KEY (permission_id) REFERENCES auth_permission(id) DEFERRABLE INITIALLY DEFERRED DEFERRABLE,
+    CONSTRAINT "auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id" FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED DEFERRABLE
+) WITH (oids = false);
+
+CREATE INDEX "auth_user_user_permissions_permission_id_1fbb5f2c" ON "public"."auth_user_user_permissions" USING btree ("permission_id");
+
+CREATE INDEX "auth_user_user_permissions_user_id_a95ead1b" ON "public"."auth_user_user_permissions" USING btree ("user_id");
+
+
+DROP TABLE IF EXISTS "django_admin_log";
+DROP SEQUENCE IF EXISTS django_admin_log_id_seq;
+CREATE SEQUENCE django_admin_log_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1;
+
+CREATE TABLE "public"."django_admin_log" (
+    "id" integer DEFAULT nextval('django_admin_log_id_seq') NOT NULL,
+    "action_time" timestamptz NOT NULL,
+    "object_id" text,
+    "object_repr" character varying(200) NOT NULL,
+    "action_flag" smallint NOT NULL,
+    "change_message" text NOT NULL,
+    "content_type_id" integer,
+    "user_id" integer NOT NULL,
+    CONSTRAINT "django_admin_log_pkey" PRIMARY KEY ("id"),
+    CONSTRAINT "django_admin_log_content_type_id_c4bce8eb_fk_django_co" FOREIGN KEY (content_type_id) REFERENCES django_content_type(id) DEFERRABLE INITIALLY DEFERRED DEFERRABLE,
+    CONSTRAINT "django_admin_log_user_id_c564eba6_fk_auth_user_id" FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED DEFERRABLE
+) WITH (oids = false);
+
+CREATE INDEX "django_admin_log_content_type_id_c4bce8eb" ON "public"."django_admin_log" USING btree ("content_type_id");
+
+CREATE INDEX "django_admin_log_user_id_c564eba6" ON "public"."django_admin_log" USING btree ("user_id");
+
+
+DROP TABLE IF EXISTS "django_content_type";
+DROP SEQUENCE IF EXISTS django_content_type_id_seq;
+CREATE SEQUENCE django_content_type_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1;
+
+CREATE TABLE "public"."django_content_type" (
+    "id" integer DEFAULT nextval('django_content_type_id_seq') NOT NULL,
+    "app_label" character varying(100) NOT NULL,
+    "model" character varying(100) NOT NULL,
+    CONSTRAINT "django_content_type_app_label_model_76bd3d3b_uniq" UNIQUE ("app_label", "model"),
+    CONSTRAINT "django_content_type_pkey" PRIMARY KEY ("id")
+) WITH (oids = false);
+
+INSERT INTO "django_content_type" ("id", "app_label", "model") VALUES
+(1,	'admin',	'logentry'),
+(2,	'auth',	'permission'),
+(3,	'auth',	'group'),
+(4,	'auth',	'user'),
+(5,	'contenttypes',	'contenttype'),
+(6,	'sessions',	'session'),
+(7,	'mimicINTapp',	'news_part'),
+(8,	'mimicINTapp',	'setting_prediction'),
+(9,	'mimicINTapp',	'home_text'),
+(10,	'mimicINTapp',	'output_file'),
+(11,	'mimicINTapp',	'pipeline_rule'),
+(12,	'mimicINTapp',	'job_infos'),
+(13,	'sites',	'site'),
+(14,	'flatpages',	'flatpage');
+
+DROP TABLE IF EXISTS "django_flatpage";
+DROP SEQUENCE IF EXISTS django_flatpage_id_seq;
+CREATE SEQUENCE django_flatpage_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1;
+
+CREATE TABLE "public"."django_flatpage" (
+    "id" integer DEFAULT nextval('django_flatpage_id_seq') NOT NULL,
+    "url" character varying(100) NOT NULL,
+    "title" character varying(200) NOT NULL,
+    "content" text NOT NULL,
+    "enable_comments" boolean NOT NULL,
+    "template_name" character varying(70) NOT NULL,
+    "registration_required" boolean NOT NULL,
+    CONSTRAINT "django_flatpage_pkey" PRIMARY KEY ("id")
+) WITH (oids = false);
+
+CREATE INDEX "django_flatpage_url_41612362" ON "public"."django_flatpage" USING btree ("url");
+
+CREATE INDEX "django_flatpage_url_41612362_like" ON "public"."django_flatpage" USING btree ("url");
+
+
+DROP TABLE IF EXISTS "django_flatpage_sites";
+DROP SEQUENCE IF EXISTS django_flatpage_sites_id_seq;
+CREATE SEQUENCE django_flatpage_sites_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1;
+
+CREATE TABLE "public"."django_flatpage_sites" (
+    "id" integer DEFAULT nextval('django_flatpage_sites_id_seq') NOT NULL,
+    "flatpage_id" integer NOT NULL,
+    "site_id" integer NOT NULL,
+    CONSTRAINT "django_flatpage_sites_flatpage_id_site_id_0d29d9d1_uniq" UNIQUE ("flatpage_id", "site_id"),
+    CONSTRAINT "django_flatpage_sites_pkey" PRIMARY KEY ("id"),
+    CONSTRAINT "django_flatpage_site_flatpage_id_078bbc8b_fk_django_fl" FOREIGN KEY (flatpage_id) REFERENCES django_flatpage(id) DEFERRABLE INITIALLY DEFERRED DEFERRABLE,
+    CONSTRAINT "django_flatpage_sites_site_id_bfd8ea84_fk_django_site_id" FOREIGN KEY (site_id) REFERENCES django_site(id) DEFERRABLE INITIALLY DEFERRED DEFERRABLE
+) WITH (oids = false);
+
+CREATE INDEX "django_flatpage_sites_flatpage_id_078bbc8b" ON "public"."django_flatpage_sites" USING btree ("flatpage_id");
+
+CREATE INDEX "django_flatpage_sites_site_id_bfd8ea84" ON "public"."django_flatpage_sites" USING btree ("site_id");
+
+
+DROP TABLE IF EXISTS "django_migrations";
+DROP SEQUENCE IF EXISTS django_migrations_id_seq;
+CREATE SEQUENCE django_migrations_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1;
+
+CREATE TABLE "public"."django_migrations" (
+    "id" integer DEFAULT nextval('django_migrations_id_seq') NOT NULL,
+    "app" character varying(255) NOT NULL,
+    "name" character varying(255) NOT NULL,
+    "applied" timestamptz NOT NULL,
+    CONSTRAINT "django_migrations_pkey" PRIMARY KEY ("id")
+) WITH (oids = false);
+
+INSERT INTO "django_migrations" ("id", "app", "name", "applied") VALUES
+(1,	'contenttypes',	'0001_initial',	'2021-04-23 13:01:26.76042+00'),
+(2,	'auth',	'0001_initial',	'2021-04-23 13:01:27.079429+00'),
+(3,	'admin',	'0001_initial',	'2021-04-23 13:01:27.641303+00'),
+(4,	'admin',	'0002_logentry_remove_auto_add',	'2021-04-23 13:01:27.741385+00'),
+(5,	'admin',	'0003_logentry_add_action_flag_choices',	'2021-04-23 13:01:27.775988+00'),
+(6,	'contenttypes',	'0002_remove_content_type_name',	'2021-04-23 13:01:27.807112+00'),
+(7,	'auth',	'0002_alter_permission_name_max_length',	'2021-04-23 13:01:27.821118+00'),
+(8,	'auth',	'0003_alter_user_email_max_length',	'2021-04-23 13:01:27.838709+00'),
+(9,	'auth',	'0004_alter_user_username_opts',	'2021-04-23 13:01:27.861172+00'),
+(10,	'auth',	'0005_alter_user_last_login_null',	'2021-04-23 13:01:27.878539+00'),
+(11,	'auth',	'0006_require_contenttypes_0002',	'2021-04-23 13:01:27.888493+00'),
+(12,	'auth',	'0007_alter_validators_add_error_messages',	'2021-04-23 13:01:27.916567+00'),
+(13,	'auth',	'0008_alter_user_username_max_length',	'2021-04-23 13:01:27.966417+00'),
+(14,	'auth',	'0009_alter_user_last_name_max_length',	'2021-04-23 13:01:28.016681+00'),
+(15,	'auth',	'0010_alter_group_name_max_length',	'2021-04-23 13:01:28.046405+00'),
+(16,	'auth',	'0011_update_proxy_permissions',	'2021-04-23 13:01:28.064706+00'),
+(17,	'sites',	'0001_initial',	'2021-04-23 13:01:28.108217+00'),
+(18,	'flatpages',	'0001_initial',	'2021-04-23 13:01:28.259518+00'),
+(19,	'mimicINTapp',	'0001_initial',	'2021-04-23 13:01:28.562122+00'),
+(20,	'mimicINTapp',	'0002_home_text',	'2021-04-23 13:01:28.672345+00'),
+(21,	'mimicINTapp',	'0003_output_file',	'2021-04-23 13:01:28.754679+00'),
+(22,	'mimicINTapp',	'0004_pipeline_rule',	'2021-04-23 13:01:28.906311+00'),
+(23,	'mimicINTapp',	'0005_job_infos',	'2021-04-23 13:01:29.055828+00'),
+(24,	'sessions',	'0001_initial',	'2021-04-23 13:01:29.181585+00'),
+(25,	'sites',	'0002_alter_domain_unique',	'2021-04-23 13:01:29.332551+00');
+
+DROP TABLE IF EXISTS "django_session";
+CREATE TABLE "public"."django_session" (
+    "session_key" character varying(40) NOT NULL,
+    "session_data" text NOT NULL,
+    "expire_date" timestamptz NOT NULL,
+    CONSTRAINT "django_session_pkey" PRIMARY KEY ("session_key")
+) WITH (oids = false);
+
+CREATE INDEX "django_session_expire_date_a5c62663" ON "public"."django_session" USING btree ("expire_date");
+
+CREATE INDEX "django_session_session_key_c0390e0f_like" ON "public"."django_session" USING btree ("session_key");
+
+
+DROP TABLE IF EXISTS "django_site";
+DROP SEQUENCE IF EXISTS django_site_id_seq;
+CREATE SEQUENCE django_site_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1;
+
+CREATE TABLE "public"."django_site" (
+    "id" integer DEFAULT nextval('django_site_id_seq') NOT NULL,
+    "domain" character varying(100) NOT NULL,
+    "name" character varying(50) NOT NULL,
+    CONSTRAINT "django_site_domain_a2e37b91_uniq" UNIQUE ("domain"),
+    CONSTRAINT "django_site_pkey" PRIMARY KEY ("id")
+) WITH (oids = false);
+
+CREATE INDEX "django_site_domain_a2e37b91_like" ON "public"."django_site" USING btree ("domain");
+
+INSERT INTO "django_site" ("id", "domain", "name") VALUES
+(1,	'example.com',	'example.com');
+
+DROP TABLE IF EXISTS "mimicINTapp_home_text";
+CREATE TABLE "public"."mimicINTapp_home_text" (
+    "text_ID" integer NOT NULL,
+    "text_title" text,
+    "text_content" text,
+    CONSTRAINT "mimicINTapp_home_text_pkey" PRIMARY KEY ("text_ID")
+) WITH (oids = false);
+
+INSERT INTO "mimicINTapp_home_text" ("text_ID", "text_title", "text_content") VALUES
+(5,	'News',	'what are the latest updates to our site?'),
+(2,	'Tutorial',	'Go through a step-by-step guide to learn how to use mimicINTweb.'),
+(3,	'Make Predicions',	'Submit your sequences (limited to 50)'),
+(4,	'Jobs',	'Retrieve your predicted interactions using a mimicINT job identifier. Results are kept for 7 days.'),
+(1,	'Presentation',	'mimicINTweb is a webserver to detect the presence of interaction elements such as domains and short linear motifs (SLiMs) and exploit them to infer the interactions, using known interaction templates, between the proteins of a microbe of interest and the human proteome.'),
+(0,	'Presentation',	'mimicINTweb is a webserver to detect the presence of interaction elements such as domains and short linear motifs (SLiMs) and exploit them to infer the interactions, using known interaction templates, between the proteins of a microbe of interest and the human proteome.');
+
+DROP TABLE IF EXISTS "mimicINTapp_job_infos";
+CREATE TABLE "public"."mimicINTapp_job_infos" (
+    "job_id" character varying(255) NOT NULL,
+    "email" character varying(255) NOT NULL,
+    "submission_date" timestamp NOT NULL,
+    "status" character varying(255) NOT NULL,
+    "run_name" character varying(255) NOT NULL,
+    "target_name" character varying(255) NOT NULL,
+    "query_name" character varying(255) NOT NULL,
+    "about" text NOT NULL,
+    CONSTRAINT "mimicINTapp_job_infos_pkey" PRIMARY KEY ("job_id")
+) WITH (oids = false);
+
+CREATE INDEX "mimicINTapp_job_infos_job_id_9174fe91_like" ON "public"."mimicINTapp_job_infos" USING btree ("job_id");
+
+INSERT INTO "mimicINTapp_job_infos" ("job_id", "email", "submission_date", "status", "run_name", "target_name", "query_name", "about") VALUES
+('WChDko6h5GXXxkkvhWjr6T',	'',	'2023-06-01 08:53:16.287434',	'',	'',	'',	'',	''),
+('hBrH5iQYDuiYY4VjWLunLj',	'',	'2023-06-01 09:00:27.430513',	'',	'',	'',	'',	''),
+('hPcSkkoQxs8cGusHLoFWM5',	'',	'2023-06-01 09:13:30.693381',	'',	'',	'',	'',	''),
+('4PEQrUH9rjRnZZtTfx4esn',	'',	'2023-06-01 09:17:55.998482',	'',	'',	'',	'',	''),
+('mPj5AiswFznNQgcf2mUYDy',	'',	'2023-06-01 12:16:11.438005',	'',	'',	'',	'',	''),
+('7ybrK7eJNNjyHwNeawrZyd',	'',	'2023-06-01 12:22:06.427889',	'',	'',	'',	'',	''),
+('cg4TEogFXfAMFsMqQoSqBB',	'',	'2023-06-01 12:25:05.76922',	'',	'',	'',	'',	''),
+('XKsLzSJNgoQnHDSjcBWE7S',	'',	'2023-06-01 12:26:56.384394',	'',	'',	'',	'',	''),
+('83LgNRBiG6MAGEvfLvkrWV',	'',	'2023-06-01 12:28:37.037677',	'',	'',	'',	'',	''),
+('Ma5dq9YjPs5gdFCkmb3eug',	'',	'2023-06-01 12:34:40.542425',	'',	'',	'',	'',	''),
+('H5xyK8ZjgkRSur3wrMh4VZ',	'',	'2023-06-01 12:40:14.772689',	'',	'',	'',	'',	''),
+('KkZr3f9o3R7QpUuWSwdjuy',	'',	'2023-06-01 12:45:50.591724',	'',	'',	'',	'',	''),
+('MYVFWSRJuoFYBm2aj2esMZ',	'',	'2023-06-01 13:20:50.156786',	'',	'',	'',	'',	''),
+('SLkpDBoKmXw6jVcVdm3bz2',	'',	'2023-06-01 13:25:48.938646',	'',	'',	'',	'',	''),
+('FnhXn9Dovh3gGMeLiZ7sDv',	'',	'2023-06-01 13:28:07.182671',	'',	'',	'',	'',	''),
+('7gf6k4pxQE7uejkBqiiZQg',	'',	'2023-06-01 13:29:34.07188',	'',	'',	'',	'',	''),
+('fsKMxHqSo7kWxyxkhxGjvG',	'',	'2023-06-01 13:32:22.410571',	'',	'',	'',	'',	''),
+('finRRadzsdPUyrrj5BSHGX',	'',	'2023-06-01 13:36:07.374446',	'',	'',	'',	'',	''),
+('36jS9XFmSDnZ9UXjrZXsYG',	'',	'2023-06-01 13:41:09.860626',	'',	'',	'',	'',	''),
+('9AQk6TDHBrMbLPwAJsHyDq',	'',	'2023-06-01 14:05:24.165897',	'',	'',	'',	'',	''),
+('RuvH3y9WGRPHvqwypPuefN',	'',	'2023-06-01 14:07:13.548032',	'',	'',	'',	'',	''),
+('W5pGksqRTpdyQpaZtPgJNc',	'',	'2023-06-02 08:42:19.051009',	'',	'',	'',	'',	''),
+('eakzroFKxgytTKZDWVD8JY',	'',	'2023-06-02 08:44:03.031176',	'',	'',	'',	'',	''),
+('oVeDM9KpJ8Na8aGTgv2HWg',	'',	'2023-06-02 08:44:29.577047',	'',	'',	'',	'',	''),
+('eNAEyUH4umTwR9jE4cccGH',	'',	'2023-06-02 08:47:36.172557',	'',	'',	'',	'',	''),
+('QPBbj2D2eHQnCGzouajH99',	'',	'2023-06-02 10:59:41.457343',	'',	'',	'',	'',	''),
+('7NAibpCKR4pDNF8NGBsDsw',	'',	'2023-06-09 12:07:13.009338',	'',	'',	'',	'',	''),
+('3cMeuQLDx8tRf2T4dzB2fu',	'',	'2023-06-09 12:14:10.21514',	'',	'',	'',	'',	''),
+('FKroRdvHrSZPsH8cFuQJHg',	'',	'2023-06-09 12:15:56.376982',	'',	'',	'',	'',	''),
+('8N5nLSqmQu6JUWGjjTFu4R',	'',	'2023-06-15 13:47:04.458753',	'',	'',	'',	'',	''),
+('5JmGM9LVeTYZFVFPpZF2on',	'',	'2023-06-26 09:37:37.417083',	'',	'',	'',	'',	''),
+('CUJnqQfJC4tvhLpBLfi74z',	'',	'2023-06-26 12:59:32.037864',	'',	'',	'',	'',	''),
+('m7aBc5XsoHNvTVjpHTyioF',	'',	'2023-06-29 11:11:42.938488',	'',	'',	'',	'',	''),
+('dAByhrPTY3cmihVhhmA7Ki',	'',	'2023-06-01 08:50:04.559807',	'',	'',	'',	'',	'');
+
+DROP TABLE IF EXISTS "mimicINTapp_news_part";
+CREATE TABLE "public"."mimicINTapp_news_part" (
+    "news_ID" integer NOT NULL,
+    "news_title" text,
+    "news_content" text,
+    CONSTRAINT "mimicINTapp_news_part_pkey" PRIMARY KEY ("news_ID")
+) WITH (oids = false);
+
+INSERT INTO "mimicINTapp_news_part" ("news_ID", "news_title", "news_content") VALUES
+(1,	'Update 2 - title of update - January 12, 2020',	'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip exea commodo consequat.'),
+(2,	'Update 3 - title of update - January 12, 2020',	'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip exea commodo consequat.'),
+(3,	'Update 4 - title of update - January 12, 2020',	'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip exea commodo consequat.'),
+(4,	'Update 5 - title of update - January 12, 2020',	'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip exea commodo consequat.'),
+(0,	'test',	'test');
+
+DROP TABLE IF EXISTS "mimicINTapp_output_file";
+CREATE TABLE "public"."mimicINTapp_output_file" (
+    "file_accession" text NOT NULL,
+    "file_description" text,
+    "file_path" text,
+    "rule_id" text,
+    CONSTRAINT "mimicINTapp_output_file_pkey" PRIMARY KEY ("file_accession")
+) WITH (oids = false);
+
+CREATE INDEX "mimicINTapp_output_file_file_accession_791f2553_like" ON "public"."mimicINTapp_output_file" USING btree ("file_accession");
+
+INSERT INTO "mimicINTapp_output_file" ("file_accession", "file_description", "file_path", "rule_id") VALUES
+('query_seqnames_match_tsv',	NULL,	'/output/4_slim_detect/query_seqnames_match.tsv',	'match_query_sqce_names'),
+('query_slim_slimprob_tsv',	NULL,	'/output/4_slim_detect/query_slim_slimprob.tsv',	'aggregate_detect_slim_query_output'),
+('parsed_3did_txt',	NULL,	'/output/0_parse_3did/parsed_3did.txt',	'parse_3did'),
+('parsed_query_domain_interpro_tsv',	NULL,	'/output/3_detect_domain_query/parsed_query_domain_interpro.tsv',	'parse_domain_query'),
+('parsed_target_domain_interpro_tsv',	NULL,	'/output/2_detect_domain_target/parsed_target_domain_interpro.tsv',	'parse_domain_target'),
+('parsed_elm_classes_txt',	NULL,	'/output/1_parse_elm/parsed_elm_classes.txt',	'parse_elm'),
+('parsed_elm_summary_tsv',	NULL,	'/output/1_parse_elm/parsed_elm_summary.tsv',	'parse_elm'),
+('query_slim_slimprob_occ_tsv',	NULL,	'/output/4_slim_detect/query_slim_slimprob.occ.tsv',	'aggregate_detect_slim_query_output'),
+('iuscore',	NULL,	'/output/4_slim_detect/iuscore',	'aggregate_detect_slim_query_output'),
+('disorder_propensities_tsv',	NULL,	'/output/4_slim_detect/disorder_propensities.tsv',	'compute_query_disorder_propensity'),
+('query_domain_interpro_tsv',	NULL,	'/output/3_detect_domain_query/query_domain_interpro.tsv',	'detect_domain_query'),
+('target_domain_interpro_tsv',	NULL,	'/output/2_detect_domain_target/target_domain_interpro.tsv',	'detect_domain_target'),
+('query_1_slim_slimprob_tsv',	NULL,	'/output/4_slim_detect/1/query_1_slim_slimprob.tsv',	'detect_slim_query_1'),
+('iuscore_1',	NULL,	'/output/4_slim_detect/1/iuscore_1',	'detect_slim_query_1'),
+('SLiMProb_1',	NULL,	'/output/4_slim_detect/1/SLiMProb_1',	'detect_slim_query_1'),
+('query_1_slim_slimprob_occ_tsv',	NULL,	'/output/4_slim_detect/1/query_1_slim_slimprob.occ.tsv',	'detect_slim_query_1'),
+('generate_json_interaction_inference_all_interactions_json',	NULL,	'/output/5_interactions/all_interactions.json',	'generate_json_interaction_inference'),
+('query_proteins_features_json',	NULL,	'/output/6_summary/query_proteins_features.json',	'generate_json_query_features'),
+('inferred_all_interactions_tsv',	NULL,	'/output/5_interactions/inferred_all_interactions.tsv',	'interaction_inference'),
+('inferred_ddi_interactions_tsv',	NULL,	'/output/5_interactions/inferred_ddi_interactions.tsv',	'interaction_inference'),
+('inferred_dmi_interactions_tsv',	NULL,	'/output/5_interactions/inferred_dmi_interactions.tsv',	'interaction_inference'),
+('parsed_query_slim_slimprob_tsv',	NULL,	'/output/4_slim_detect/parsed_query_slim_slimprob.tsv',	'parse_slim_query'),
+('query_slims_tsv',	NULL,	'/output/7_renamed_sequences/query_slims.tsv',	'simplify_sequence_names'),
+('dd_interactions_tsv',	NULL,	'/output/7_renamed_sequences/dd_interactions.tsv',	'simplify_sequence_names'),
+('query_disorder_prop_tsv',	NULL,	'/output/7_renamed_sequences/query_disorder_prop.tsv',	'simplify_sequence_names'),
+('query_domains_tsv',	NULL,	'/output/7_renamed_sequences/query_domains.tsv',	'simplify_sequence_names'),
+('target_domains_tsv',	NULL,	'/output/7_renamed_sequences/target_domains.tsv',	'simplify_sequence_names'),
+('sequence_names_tsv',	NULL,	'/output/7_renamed_sequences/sequence_names.tsv',	'simplify_sequence_names'),
+('simplify_sequence_names_all_interactions_json',	NULL,	'/output/7_renamed_sequences/all_interactions.json',	'simplify_sequence_names'),
+('query_features_json',	NULL,	'/output/7_renamed_sequences/query_features.json',	'simplify_sequence_names'),
+('index_html',	NULL,	'/output/8_gprofiler/index.html',	'target_enrichment_gprofiler'),
+('all_interactions_tsv',	NULL,	'/output/7_renamed_sequences/all_interactions.tsv',	'simplify_sequence_names'),
+('dm_interactions_tsv',	NULL,	'/output/7_renamed_sequences/dm_interactions.tsv',	'simplify_sequence_names'),
+('4_splitted_query',	NULL,	'/output/4_splitted_query',	'split_query_dataset'),
+('unique_target_interactors_txt',	NULL,	'/output/8_gprofiler/unique_target_interactors.txt',	'target_enrichment_gprofiler'),
+('gprofiler_result_tsv',	NULL,	'/output/8_gprofiler/gprofiler_result.tsv',	'target_enrichment_gprofiler'),
+('unique_target_acc_txt',	NULL,	'/output/8_gprofiler/unique_target_acc.txt',	'target_enrichment_gprofiler');
+
+DROP TABLE IF EXISTS "mimicINTapp_pipeline_rule";
+CREATE TABLE "public"."mimicINTapp_pipeline_rule" (
+    "rule_id" text NOT NULL,
+    "rule_order" integer,
+    "rule_description" text,
+    "rule_duration" integer,
+    "log_path" text,
+    CONSTRAINT "mimicINTapp_pipeline_rule_pkey" PRIMARY KEY ("rule_id")
+) WITH (oids = false);
+
+CREATE INDEX "mimicINTapp_pipeline_rule_rule_ID_98e39e87_like" ON "public"."mimicINTapp_pipeline_rule" USING btree ("rule_id");
+
+INSERT INTO "mimicINTapp_pipeline_rule" ("rule_id", "rule_order", "rule_description", "rule_duration", "log_path") VALUES
+('ddi_template_pfam_to_interpro',	2,	'Convert the Pfam accessions in the file parsed from 3did into InterPro accessions',	45,	''),
+('parse_elm',	3,	'Filter ELM classes based on their probability of occurence',	30,	''),
+('elm_domain_interactions_to_interpro',	4,	'Convert the Pfam accessions in the ELM - domain interaction file into InterPro accessions',	30,	''),
+('simplify_sequence_names',	17,	'Rename the sequences in all the output (optional rule)',	300,	''),
+('generate_json_query_features',	18,	'Generate a json file that may be used to display the sequences on the web interface',	60,	''),
+('target_enrichment_gprofiler',	19,	'Perform a gProfiler analysis on the target interactors',	600,	''),
+('detect_slim_query',	8,	'Use SLiMProb (SLiM suite) to identify the SLiM in the query sequences, and optionally perfom a conservation analysis',	150,	''),
+('aggregate_detect_slim_query_output',	9,	'Aggregate the outputs of the detect_slim_query rule into one single file',	45,	''),
+('parse_slim_query',	11,	'Parse the output of SLiM Prob in order to get useful information',	30,	''),
+('compute_query_disorder_propensity',	12,	'Compute the disordered propensity for query sequences',	45,	''),
+('interaction_inference',	13,	'Inference the domain(target) - domain(query) and domain(target) - SLiM(query) interactions by combining the identifications of the domains and SLiM in the provided sequences and using H.
+sapiens known templates interaction',	90,	''),
+('parse_3did',	1,	'Parse the flat file from 3did to gather domain-domain interaction templates',	60,	''),
+('get_target_prot_with_potential_interactions',	5,	NULL,	50,	NULL),
+('detect_domain_query',	6,	'Use InterProScan to detect the domains in the query sequences',	330,	''),
+('parse_domain_query',	7,	'Parse the InterProScan output run on the query sequences to get useful information',	30,	''),
+('match_query_sqce_names',	10,	'Compute the correspondences between the sequence names used by SLiMProb and the name of the sequence from the query fasta headers',	15,	''),
+('filter_dmi_on_domain_score',	14,	NULL,	50,	NULL),
+('extract_binary_interactions',	15,	NULL,	50,	NULL),
+('generate_json_interaction_inference',	16,	'Generate a json file that may be used by Cytoscape',	210,	'');
+
+DROP TABLE IF EXISTS "mimicINTapp_setting_prediction";
+CREATE TABLE "public"."mimicINTapp_setting_prediction" (
+    "setting_ID" integer NOT NULL,
+    "setting_name" text,
+    "tooltip" text,
+    CONSTRAINT "mimicINTapp_setting_prediction_pkey" PRIMARY KEY ("setting_ID")
+) WITH (oids = false);
+
+INSERT INTO "mimicINTapp_setting_prediction" ("setting_ID", "setting_name", "tooltip") VALUES
+(11,	'Disorder Region (min.length)',	'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'),
+(0,	'Query Sequences',	'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'),
+(1,	'Run Name',	'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'),
+(2,	'Host Name',	'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'),
+(3,	'Microbe Species',	'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'),
+(4,	'About',	'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'),
+(5,	'Receive an email',	'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'),
+(6,	'Interaction Templates',	'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'),
+(7,	'Domain Family',	'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'),
+(8,	'Preferentially Targeted Network Modules',	'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'),
+(10,	'Disorder Threshold',	'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'),
+(12,	'Domain Detection Threshold',	'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'),
+(13,	'Conserved SLiM Only',	'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'),
+(9,	'Iumethod',	'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'),
+(14,	'Score_treshold_query',	'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'),
+(15,	'Simplify_seq_name',	'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.');
+
+-- 2023-10-13 11:35:08.050886+00

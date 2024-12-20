@@ -1,0 +1,16 @@
+FROM nginx:1.25
+
+RUN rm /etc/nginx/conf.d/default.conf
+COPY ./container/nginx/conf.d/nginx.conf /etc/nginx/conf.d/default.conf
+
+
+
+
+WORKDIR ./container/nginx/ssl/
+## create certificat for SSL request (port 443)
+#RUN openssl req -new -newkey rsa:2048 -nodes -out mimicINT_tagc_luminy.csr -keyout mimicINT_tagc_luminy.key -subj "/C=FR/L=Marseille/O=TAGC/OU=IT/CN=mimicINT.tagc.luminy"
+
+RUN openssl req -x509 -newkey rsa:4096 -sha256 -nodes -keyout key_mimicINT.pem -out cert_mimicINT.pem -days 365 -subj "/C=FR/L=Marseille/O=TAGC/OU=IT/CN=mimicINT.localhost"
+
+
+EXPOSE 443

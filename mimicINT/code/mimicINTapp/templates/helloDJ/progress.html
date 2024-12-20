@@ -1,0 +1,45 @@
+{% extends "helloDJ/base.html" %}
+{% load static %}
+{% block content %}
+<body xmlns="http://www.w3.org/1999/html">
+    <script>
+        function updateProgressBar() {
+            var job_id = '{{ job_id }}';
+            $.ajax({
+                url: '/results/progress/' + job_id,
+                success: function(data) {
+                    var progress = data.progress;
+                    var total_rule = data.total_rule
+                    var rule_index = data.rule_index
+                    
+                    $('.progress-bar').attr('aria-valuenow', progress).css('width', progress + '%').text(rule_index + '/' + total_rule);
+                    
+                    if (total_rule === rule_index) {
+                        location.reload();
+                    }
+                },
+                error: function() {
+                    console.log('Error fetching progress data');
+                }
+            });
+        }
+        setInterval(updateProgressBar, 10);
+    </script>
+    <div id="job-progress" data-job-id="{{ job_id }}">
+        <div class="d-flex flex-row align-items-center section-padding">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-12 text-center" style="padding-block: 15%;">
+                        <span class="s0" style="font-size: 80px;">Workflow in progress</span>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <button class="submit-button" onclick="window.location.href='{% url 'home'%}'" style ="background: linear-gradient(135deg, #0088c9 80%, #fff 81%, #1A5276 82%);">go to home page</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+{% endblock content %}

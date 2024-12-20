@@ -1,0 +1,215 @@
+{% extends "helloDJ/base.html" %}
+{% block content %}
+{% load static %}
+
+
+<section id="home" class="section-padding">
+    <div>
+        <br>
+        <h1 class="s0">How to run <em>mimic</em>INT</h1>
+    </div> 
+    
+    
+    
+    <div class="row">
+        <div class="header-section text-center">
+            <h2>Upload your sequences</h2>
+            <hr class="bottom-line">
+            <div>
+                <p>
+                 The user can submit up to 50 proteins sequences <b>(1)</b>. 
+                 Moreover, the user can also choose a run name <b>(2)</b> and provide a short 
+                 description <b>(3)</b>. This can be useful if the user plans to run multiple 
+                 <em>mimic</em>INT inference tasks. By clicking on the show options button <b>(4)</b>, 
+                 the user can tune the running parameters or run <em>mimic</em>INT with the default ones <b>(5)</b>.
+                </p>
+	
+
+		<figure>
+		  <img src="{%  static 'tutorial_mimicint_01.png' %}" alt="tutorial_mimicint_01" style="width:80%">
+		</figure> 
+	<br>
+
+	</div>
+	<h2>Choice of the parameters</h2>
+	<hr class="bottom-line">
+	<div>
+
+	  <p> The parameters that the user can tune are the following:
+	  </p>
+	  <p> The IUPred disorder prediction modality (either short or long) <b>(1)</b>
+	  </p>
+	  <p> The disorder propensity score (default = 0.4) <b>(2)</b>
+	  </p>
+	  <p> The minimum size of the disorder region in which short linear motifs 
+	  should be identified (default = 10) <b>(3)</b>
+	  </p>
+	  <p> The E-value threshold for domain detection in the user sequences (default = 10<sup>-5</sup>) <b>(4)</b>.
+	  </p>
+	  <p> The host protein domain score threshold (default = 0.3) <b>(5)</b>. You can find more 
+	  details on the domain score in the documentation page.
+	  </p>
+	  <p> The user can reset the parameters to default anytime <b>(6)</b>, hide the options <b>(7)</b> 
+	  and/or run <em>mimic</em>INT <b>(8)</b>.
+	  </p>
+	   
+	   <figure>
+		  <img src="{%  static 'tutorial_mimicint_02.png' %}" alt="tutorial_mimicint_02" style="width:80%">
+		</figure> 
+	<br>
+
+    </div>
+
+
+
+       <h2><em>mimic</em>INT job handling</h2>
+       <hr class="bottom-line">
+       <div>
+         <p><em>mimic</em>INT<em>web</em> assigns to each run a unique identifier. 
+         Based on the number of submitted sequences, a run can last between 3 and 15 minutes. 
+         User jobs are managed by the <em>SLURM workload manager</em>.
+         </p>
+         <figure>
+		  <img src="{%  static 'tutorial_mimicint_02_bis.png' %}" alt="tutorial_mimicint_02_bis" style="width:80%">
+			</figure> 
+	<br>
+
+         
+         
+       </div>
+
+
+       <h2>Result summary and sequence features</h2>
+       <hr class="bottom-line">
+       <div align="left">
+
+         <p><em>mimic</em>INT<em>web</em> provides a summary of the results, that is the number of interacting host 
+         proteins and the number of inferred interactions <b>(1)</b>. It also provides some statistics 
+         on the user proteins sequence features, such as their length and their disorder content, 
+         defined as the fraction of amino acids with a disorder propensity above the user-defined 
+         threshold <b>(2)</b>. 
+         </p>
+         
+         <figure>
+		  <img src="{%  static 'tutorial_mimicint_03.png' %}" alt="tutorial_mimicint_03" style="width:80%">
+			</figure> 
+	<br>
+
+       </div>
+
+		<h2>Searching the sequences feature table</h2>
+       <hr class="bottom-line">
+       <div align="left">
+
+         <p>For each user protein, it provides also a table lists of domains and 
+         SLiMs detected along with their relative position. The user can search 
+         and filter the content of the table <b>(1)</b>.
+         </p>
+         
+         <figure>
+		  <img src="{%  static 'tutorial_mimicint_04.png' %}" alt="tutorial_mimicint_04" style="width:80%">
+			</figure> 
+	<br>
+
+       </div>
+
+
+		<h2>Inferred interactions (full set)</h2>
+       <hr class="bottom-line">
+       <div align="left">
+
+         <p>By clicking on the inferred interactions (full) button, the whole list of inferred 
+         interactions is displayed in a tabular format. For each interaction, the table lists the 
+         identifier of the user sequence, the identifier of detected domain (InterPro) or SLiM (ELM), 
+         the host protein identifier (UniprotKB), the host cognate domain (InterPro) as well as the 
+         interaction template type (domain-domain or motif-domain). Identifiers (besides the 
+         user-provided ones) are clickable and allow to visualize their description. The user can 
+         search, sort and filter the content of the table.
+         </p>
+         
+         <figure>
+		  <img src="{%  static 'tutorial_mimicint_05.png' %}" alt="tutorial_mimicint_05" style="width:80%">
+			</figure> 
+	<br>
+
+       </div>
+
+
+		<h2>Inferred interactions (filtered)</h2>
+       <hr class="bottom-line">
+       <div align="left">
+
+         <p>By clicking on the inferred interactions (filtered) button, provide the whole list of inferred domain-domain interactions and the inferred motif-domain interactions that fulfil the domain score threshold set by the user. The table content is the same as the inferred interactions (full) page. Identifiers (besides the user-provided ones) are clickable and allow to visualize their description. The user can search, sort and filter the content of the table.
+         </p>
+         
+         <figure>
+		  <img src="{%  static 'tutorial_mimicint_06.png' %}" alt="tutorial_mimicint_06" style="width:80%">
+			</figure> 
+	<br>
+
+       </div>
+
+
+		<h2>Functional enrichment</h2>
+       <hr class="bottom-line">
+       <div align="left">
+
+         <p>The user can visualize the results of a functional enrichment analysis generated using 
+         the gprofiler2 R client. The annotations that are tested are: Gene Ontology (all branches), 
+         Reactome and KEGG pathways. Only enriched annotations with an adjusted p-value < 0.05 are listed. 
+         For each enriched annotation, the following details are provided: identifier, annotation source, 
+         annotation term name, adjusted p-value, number of annotated host protein with the given term in 
+         the statistical background, number of query proteins, number of query proteins annotated with 
+         the given term. 
+         </p>
+         
+         <figure>
+		  <img src="{%  static 'tutorial_mimicint_07.png' %}" alt="tutorial_mimicint_07" style="width:80%">
+			</figure> 
+	<br>
+	      <p>The user can search, sort and filter the content of the table.
+         </p>
+         
+         <figure>
+		  <img src="{%  static 'tutorial_mimicint_08.png' %}" alt="tutorial_mimicint_08" style="width:80%">
+			</figure> 
+	<br>
+
+       </div>
+
+<h2>Download files</h2>
+       <hr class="bottom-line">
+       <div align="left">
+
+
+	      <p>The user can download all the output files related to the run in a ZIP archive for further down-stream analyses
+         </p>
+         
+         <figure>
+		  <img src="{%  static 'tutorial_mimicint_09.png' %}" alt="tutorial_mimicint_09" style="width:80%">
+			</figure> 
+	<br>
+
+       </div>
+
+<h2>Retrieve a user job</h2>
+       <hr class="bottom-line">
+       <div align="left">
+
+
+	      <p>The user can paste a job identifier to retrieve the corresponding results, which are removed 
+	      on a regular basis.
+	      </p>
+         <figure>
+		  <img src="{%  static 'tutorial_mimicint_10.png' %}" alt="tutorial_mimicint_10" style="width:80%">
+			</figure> 
+	<br>
+
+       </div>
+
+
+
+</section>
+
+
+{% endblock %}

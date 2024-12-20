@@ -1,0 +1,27 @@
+{% extends "helloDJ/base.html" %}
+{% block content %}
+{% load static %}
+
+<br>
+<center>
+   <span class="s0" style="font-size: 42px;">mimicINT is running</span>
+        <br>
+	<img src="{%  static 'gif/engrenage.gif' %}" style="width: 500px; "/>
+	<br>Please, wait until your results are generated. You can bookmark
+	this page and come later.
+	<br>Your job id: <a href="/results/{{ run_id }}" target="_blank">{{ run_id }}</a>
+</center>
+
+
+
+
+<script>
+	window.setTimeout(function () {
+	    location = ''
+	}, 10000);
+</script>
+
+
+
+{% endblock %}
+
