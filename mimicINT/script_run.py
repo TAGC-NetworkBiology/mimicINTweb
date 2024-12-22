@@ -12,7 +12,8 @@ except ImportError as e:
 
 # Variable for database
 USER = "django"
-PASSWORD = "mimicINTweb"
+#set your password here
+PASSWORD = ""
 HOST = "*"
 PORT = "5432"
 DATABASE = "mimicINT_db"
