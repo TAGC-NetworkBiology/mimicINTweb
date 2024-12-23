@@ -1,30 +1,27 @@
-  ////////////////////////////////////////////////////////////////////////////
  //////////////////////////////////README////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
 
-Le dossier STATIC contient les fichiers images, CSS et JavaScript
+The STATIC folder contains image, CSS and JavaScript files.
 
-Librairies utilisees :
-	- Bootstrap est utilisé pour que le site soit responsive
-	- Cytoscape permet de generer un graph du reseau d'interaction infere
-	- D3 est une dependance de feature-viewer
-	- Datatables nous permet de generer des tables modulables
-	- Feature-Viewer permet de visualiser la sequences des proteines query
-	- Fonts permet de generer des icones pour le site
-	- JQuery permet d'injecter du code dans les pages html 
-		(utilise pour remplir les tables de resultat)
-	  JQuery est une dependance de Feature-Viewer
+Please, note that the Cytoscape functionalities are not implemented in the current version.
 
-
-Fichiers crees par le developpeur :
-	- css/style.css : contient toute la mise en page du site (feuille de style)
-	- cytoscape/cytoscape.css : permet de generer le DIV de cytoscape au petit ou au grand format
-	  (pour result.html et cytoscape.html respectivement)
-	- cytoscape/network.js : permet de generer le graph
-	- dataTables/make_tables.js : definit le format des tables DataTables
-	- feature-viewer/create-features.js : definit les features de l'outil de visualisation
-	- feature-viewer/show_domains.js : remplit la table des domaines/motif et le visualiseur de 
+Libraries used :
+	- Bootstrap is used to make the site responsive
+	- Cytoscape is used to generate a graph of the inferred interaction network
+	- D3 is a feature-viewer dependency
+	- Datatables allows us to generate modular tables
+	- Feature-Viewer lets you visualize the sequence of queried proteins
+	- Fonts generates icons for the site
+	- JQuery injects code into html pages (used to populate results tables). JQuery is a Feature-Viewer dependency
+	  
+Files to be created by the developer :
+	- css/style.css: contains the entire site layout (style sheet)
+	- cytoscape/cytoscape.css: generates the cytoscape DIV in small or large format
+	  (for result.html and cytoscape.html respectively)
+	- cytoscape/network.js: generates the graph
+	- dataTables/make_tables.js : defines DataTables format
+	- feature-viewer/create-features.js : defines visualization tool features
+	- feature-viewer/show_domains.js: fills the domains/patterns table and the 
 	  sequences
-	- js/options.js : permet de reset les parametres du formulaire
-	- js/tooltip : permet de generer des infobulles
-
+	- js/options.js: resets form parameters
+	- js/tooltip: generates tooltips
